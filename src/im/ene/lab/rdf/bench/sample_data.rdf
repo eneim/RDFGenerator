@@ -1,0 +1,54 @@
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:type="http://lab.ene.im/type/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:paper="http://lab.ene.im/paper/"
+    xmlns:author="http://lab.ene.im/author/"
+    xmlns:ene="http://lab.ene.im/property/"
+    xmlns:uri="http://lab.ene.im/book/" > 
+  <rdf:Description rdf:nodeID="A0">
+    <ene:object>75iHJG7IsGWEzRftPhiPKHUEVThbRioZPZCitV3/ptM=</ene:object>
+    <ene:predicate>0YA+xMbxITMmRO6cqG+P5+KMGt6Ml6R39PsFbp4r5RNI3q+9DHtCDM5tkqSKSRE4</ene:predicate>
+    <ene:subject>37f3aac3-6802-4f32-8e28-07698bc677e5</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A1">
+    <ene:object>MBBmFSyY44+zGPkgiayCvKkKxAr8EQfFwlv8Dh8Nbzk=</ene:object>
+    <ene:predicate>DaniNPoBo6G2AkODG4q/NaCWx94Ofx0PUa2oHLUMvZE=</ene:predicate>
+    <ene:subject>416acf7a-512b-42fd-99cc-6442d86ef0d9</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A2">
+    <ene:object>dAudHCHVK8roXX8sTDZZYg/XBHYlWgoQ9DK9i+tc1Wo=</ene:object>
+    <ene:predicate>DaniNPoBo6G2AkODG4q/NaCWx94Ofx0PUa2oHLUMvZE=</ene:predicate>
+    <ene:subject>3ca48f09-c9c6-4e4c-9a15-445572e84206</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A3">
+    <ene:object>8oFoHjwABMIaLVxR3wsQRWd7jg54JpKXh47tyiiOKq8=</ene:object>
+    <ene:predicate>DaniNPoBo6G2AkODG4q/NaCWx94Ofx0PUa2oHLUMvZE=</ene:predicate>
+    <ene:subject>4509321a-cde0-4e09-b35c-2293bcb9ba83</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A4">
+    <ene:object>75iHJG7IsGWEzRftPhiPKKLIgyOPAiCN7XCeWWcizxEmFuM5TIUbSPy8Zjiu9GaG</ene:object>
+    <ene:predicate>DaniNPoBo6G2AkODG4q/NZ4Y1Fh0hW51B4BSjTG6qWg=</ene:predicate>
+    <ene:subject>73286a48-a971-473f-805e-c165ed3bff77</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A5">
+    <ene:object>ef97145a-ce11-4354-b006-a18c35b7161b</ene:object>
+    <ene:predicate>DaniNPoBo6G2AkODG4q/NSj8lpWcAhYTiRgspPmNP/HkZ+ym4W25sMcFKwbRLXF+</ene:predicate>
+    <ene:subject>220a26e4-871a-43c2-9b8f-034ee74601a6</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A6">
+    <ene:object>75iHJG7IsGWEzRftPhiPKAWtL2J1z/Lf+pg+6x9+udE=</ene:object>
+    <ene:predicate>0YA+xMbxITMmRO6cqG+P5+KMGt6Ml6R39PsFbp4r5RNI3q+9DHtCDM5tkqSKSRE4</ene:predicate>
+    <ene:subject>36da6600-1938-4a67-a0ce-99ab45bd4f79</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A7">
+    <ene:object>75iHJG7IsGWEzRftPhiPKHUEVThbRioZPZCitV3/ptM=</ene:object>
+    <ene:predicate>0YA+xMbxITMmRO6cqG+P5+KMGt6Ml6R39PsFbp4r5RNI3q+9DHtCDM5tkqSKSRE4</ene:predicate>
+    <ene:subject>80339745-03ac-4f80-865a-1b79a55ad525</ene:subject>
+  </rdf:Description>
+  <rdf:Description rdf:nodeID="A8">
+    <ene:object>a474babf-708b-4f63-9a2d-504be7d7e961</ene:object>
+    <ene:predicate>DaniNPoBo6G2AkODG4q/NSj8lpWcAhYTiRgspPmNP/HkZ+ym4W25sMcFKwbRLXF+</ene:predicate>
+    <ene:subject>4b077505-f7be-459c-93a2-b05b92caac8e</ene:subject>
+  </rdf:Description>
+</rdf:RDF>
