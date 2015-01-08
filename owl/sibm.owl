@@ -7,4 +7,14 @@
   xmlns:owl="http://www.w3.org/2002/07/owl#"
 >
 
+<owl:Ontology rdf:about="">
+  <rdfs:comment>An RDF Dataset Generator for Shelter Information</rdfs:comment>
+  <rdfs:label>SIBM</rdfs:label>
+  <owl:versionInfo>shelter-info-bench-ontology-owl, ver January 1, 2015</owl:versionInfo>
+</owl:Ontology>
+
+<owl:Class rdf:ID="Person">
+  <rdfs:label>person</rdfs:label>
+</owl:Class>
+
 </rdf:RDF>
