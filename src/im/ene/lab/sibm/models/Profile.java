@@ -1,4 +1,3 @@
-
 package im.ene.lab.sibm.models;
 
 import javax.annotation.Generated;
@@ -6,384 +5,364 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Profile {
 
-    private String userID;
-    private String firstName;
-    private String surname;
-    private String translitFirstName;
-    private String translitSurname;
-    private String gender;
-    private String birthday;
-    private String age;
-    private String country;
-    private String iso;
-    private String passportNumber;
-    private String ssNumber;
-    private String phone;
-    private String address;
-    private String zipCode;
-    private String email;
-    private String username;
-    private String password;
-    private String registeredDate;
-    private String occupation;
-  
-    /**
-     * 
-     * @return
-     *     The userID
-     */
-    public String getUserID() {
-        return userID;
-    }
+	private String userID;
+	private String firstName;
+	private String surname;
+	private String translitFirstName;
+	private String translitSurname;
+	private String gender;
+	private String birthday;
+	private String age;
+	private String country;
+	private String iso;
+	private String passportNumber;
+	private String ssNumber;
+	private String phone;
+	private String address;
+	private String zipCode;
+	private String email;
+	private String username;
+	private String password;
+	private String registeredDate;
+	private String occupation;
 
-    /**
-     * 
-     * @param userID
-     *     The userID
-     */
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
+	/**
+	 * 
+	 * @return The userID
+	 */
+	public String getUserID() {
+		return userID;
+	}
 
-    /**
-     * 
-     * @return
-     *     The firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
+	/**
+	 * 
+	 * @param userID
+	 *            The userID
+	 */
+	public void setUserID(String userID) {
+		this.userID = userID;
+	}
 
-    /**
-     * 
-     * @param firstName
-     *     The firstName
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	/**
+	 * 
+	 * @return The firstName
+	 */
+	public String getFirstName() {
+		return firstName;
+	}
 
-    /**
-     * 
-     * @return
-     *     The surname
-     */
-    public String getSurname() {
-        return surname;
-    }
+	/**
+	 * 
+	 * @param firstName
+	 *            The firstName
+	 */
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    /**
-     * 
-     * @param surname
-     *     The surname
-     */
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+	/**
+	 * 
+	 * @return The surname
+	 */
+	public String getSurname() {
+		return surname;
+	}
 
-    /**
-     * 
-     * @return
-     *     The translitFirstName
-     */
-    public String getTranslitFirstName() {
-        return translitFirstName;
-    }
+	/**
+	 * 
+	 * @param surname
+	 *            The surname
+	 */
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
 
-    /**
-     * 
-     * @param translitFirstName
-     *     The translitFirstName
-     */
-    public void setTranslitFirstName(String translitFirstName) {
-        this.translitFirstName = translitFirstName;
-    }
+	/**
+	 * 
+	 * @return The translitFirstName
+	 */
+	public String getTranslitFirstName() {
+		return translitFirstName;
+	}
 
-    /**
-     * 
-     * @return
-     *     The translitSurname
-     */
-    public String getTranslitSurname() {
-        return translitSurname;
-    }
+	/**
+	 * 
+	 * @param translitFirstName
+	 *            The translitFirstName
+	 */
+	public void setTranslitFirstName(String translitFirstName) {
+		this.translitFirstName = translitFirstName;
+	}
 
-    /**
-     * 
-     * @param translitSurname
-     *     The translitSurname
-     */
-    public void setTranslitSurname(String translitSurname) {
-        this.translitSurname = translitSurname;
-    }
+	/**
+	 * 
+	 * @return The translitSurname
+	 */
+	public String getTranslitSurname() {
+		return translitSurname;
+	}
 
-    /**
-     * 
-     * @return
-     *     The gender
-     */
-    public String getGender() {
-        return gender;
-    }
+	/**
+	 * 
+	 * @param translitSurname
+	 *            The translitSurname
+	 */
+	public void setTranslitSurname(String translitSurname) {
+		this.translitSurname = translitSurname;
+	}
 
-    /**
-     * 
-     * @param gender
-     *     The gender
-     */
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+	/**
+	 * 
+	 * @return The gender
+	 */
+	public String getGender() {
+		return gender;
+	}
 
-    /**
-     * 
-     * @return
-     *     The birthday
-     */
-    public String getBirthday() {
-        return birthday;
-    }
+	/**
+	 * 
+	 * @param gender
+	 *            The gender
+	 */
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-    /**
-     * 
-     * @param birthday
-     *     The birthday
-     */
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
+	/**
+	 * 
+	 * @return The birthday
+	 */
+	public String getBirthday() {
+		return birthday;
+	}
 
-    /**
-     * 
-     * @return
-     *     The age
-     */
-    public String getAge() {
-        return age;
-    }
+	/**
+	 * 
+	 * @param birthday
+	 *            The birthday
+	 */
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
 
-    /**
-     * 
-     * @param age
-     *     The age
-     */
-    public void setAge(String age) {
-        this.age = age;
-    }
+	/**
+	 * 
+	 * @return The age
+	 */
+	public String getAge() {
+		return age;
+	}
 
-    /**
-     * 
-     * @return
-     *     The country
-     */
-    public String getCountry() {
-        return country;
-    }
+	/**
+	 * 
+	 * @param age
+	 *            The age
+	 */
+	public void setAge(String age) {
+		this.age = age;
+	}
 
-    /**
-     * 
-     * @param country
-     *     The country
-     */
-    public void setCountry(String country) {
-        this.country = country;
-    }
+	/**
+	 * 
+	 * @return The country
+	 */
+	public String getCountry() {
+		return country;
+	}
 
-    /**
-     * 
-     * @return
-     *     The iso
-     */
-    public String getIso() {
-        return iso;
-    }
+	/**
+	 * 
+	 * @param country
+	 *            The country
+	 */
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-    /**
-     * 
-     * @param iso
-     *     The iso
-     */
-    public void setIso(String iso) {
-        this.iso = iso;
-    }
+	/**
+	 * 
+	 * @return The iso
+	 */
+	public String getIso() {
+		return iso;
+	}
 
-    /**
-     * 
-     * @return
-     *     The passportNumber
-     */
-    public String getPassportNumber() {
-        return passportNumber;
-    }
+	/**
+	 * 
+	 * @param iso
+	 *            The iso
+	 */
+	public void setIso(String iso) {
+		this.iso = iso;
+	}
 
-    /**
-     * 
-     * @param passportNumber
-     *     The passportNumber
-     */
-    public void setPassportNumber(String passportNumber) {
-        this.passportNumber = passportNumber;
-    }
+	/**
+	 * 
+	 * @return The passportNumber
+	 */
+	public String getPassportNumber() {
+		return passportNumber;
+	}
 
-    /**
-     * 
-     * @return
-     *     The ssNumber
-     */
-    public String getSsNumber() {
-        return ssNumber;
-    }
+	/**
+	 * 
+	 * @param passportNumber
+	 *            The passportNumber
+	 */
+	public void setPassportNumber(String passportNumber) {
+		this.passportNumber = passportNumber;
+	}
 
-    /**
-     * 
-     * @param ssNumber
-     *     The ssNumber
-     */
-    public void setSsNumber(String ssNumber) {
-        this.ssNumber = ssNumber;
-    }
+	/**
+	 * 
+	 * @return The ssNumber
+	 */
+	public String getSsNumber() {
+		return ssNumber;
+	}
 
-    /**
-     * 
-     * @return
-     *     The phone
-     */
-    public String getPhone() {
-        return phone;
-    }
+	/**
+	 * 
+	 * @param ssNumber
+	 *            The ssNumber
+	 */
+	public void setSsNumber(String ssNumber) {
+		this.ssNumber = ssNumber;
+	}
 
-    /**
-     * 
-     * @param phone
-     *     The phone
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	/**
+	 * 
+	 * @return The phone
+	 */
+	public String getPhone() {
+		return phone;
+	}
 
-    /**
-     * 
-     * @return
-     *     The address
-     */
-    public String getAddress() {
-        return address;
-    }
+	/**
+	 * 
+	 * @param phone
+	 *            The phone
+	 */
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    /**
-     * 
-     * @param address
-     *     The address
-     */
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	/**
+	 * 
+	 * @return The address
+	 */
+	public String getAddress() {
+		return address;
+	}
 
-    /**
-     * 
-     * @return
-     *     The zipCode
-     */
-    public String getZipCode() {
-        return zipCode;
-    }
+	/**
+	 * 
+	 * @param address
+	 *            The address
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
-    /**
-     * 
-     * @param zipCode
-     *     The zipCode
-     */
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
-    }
+	/**
+	 * 
+	 * @return The zipCode
+	 */
+	public String getZipCode() {
+		return zipCode;
+	}
 
-    /**
-     * 
-     * @return
-     *     The email
-     */
-    public String getEmail() {
-        return email;
-    }
+	/**
+	 * 
+	 * @param zipCode
+	 *            The zipCode
+	 */
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
 
-    /**
-     * 
-     * @param email
-     *     The email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	/**
+	 * 
+	 * @return The email
+	 */
+	public String getEmail() {
+		return email;
+	}
 
-    /**
-     * 
-     * @return
-     *     The username
-     */
-    public String getUsername() {
-        return username;
-    }
+	/**
+	 * 
+	 * @param email
+	 *            The email
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    /**
-     * 
-     * @param username
-     *     The username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	/**
+	 * 
+	 * @return The username
+	 */
+	public String getUsername() {
+		return username;
+	}
 
-    /**
-     * 
-     * @return
-     *     The password
-     */
-    public String getPassword() {
-        return password;
-    }
+	/**
+	 * 
+	 * @param username
+	 *            The username
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    /**
-     * 
-     * @param password
-     *     The password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	/**
+	 * 
+	 * @return The password
+	 */
+	public String getPassword() {
+		return password;
+	}
 
-    /**
-     * 
-     * @return
-     *     The registeredDate
-     */
-    public String getRegisteredDate() {
-        return registeredDate;
-    }
+	/**
+	 * 
+	 * @param password
+	 *            The password
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    /**
-     * 
-     * @param registeredDate
-     *     The registeredDate
-     */
-    public void setRegisteredDate(String registeredDate) {
-        this.registeredDate = registeredDate;
-    }
+	/**
+	 * 
+	 * @return The registeredDate
+	 */
+	public String getRegisteredDate() {
+		return registeredDate;
+	}
 
-    /**
-     * 
-     * @return
-     *     The occupation
-     */
-    public String getOccupation() {
-        return occupation;
-    }
+	/**
+	 * 
+	 * @param registeredDate
+	 *            The registeredDate
+	 */
+	public void setRegisteredDate(String registeredDate) {
+		this.registeredDate = registeredDate;
+	}
 
-    /**
-     * 
-     * @param occupation
-     *     The occupation
-     */
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
+	/**
+	 * 
+	 * @return The occupation
+	 */
+	public String getOccupation() {
+		return occupation;
+	}
+
+	/**
+	 * 
+	 * @param occupation
+	 *            The occupation
+	 */
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
 }

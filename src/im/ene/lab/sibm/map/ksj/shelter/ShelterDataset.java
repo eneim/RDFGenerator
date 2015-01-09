@@ -1,11 +1,8 @@
 package im.ene.lab.sibm.map.ksj.shelter;
 
 import im.ene.lab.sibm.models.Prefix;
+import im.ene.lab.sibm.models.ShelterPoint;
 import im.ene.lab.sibm.util.DataUtil;
-
-import java.io.UnsupportedEncodingException;
-
-import com.hp.hpl.jena.rdf.model.Model;
 
 public class ShelterDataset {
 
@@ -36,11 +33,4 @@ public class ShelterDataset {
 		return DataUtil.GSON.toJson(this);
 	}
 
-	public Model toRDF(Model model) throws UnsupportedEncodingException {
-		for (ShelterPoint point : this.getShelterPoints()) {
-			model.add(point.getModel());
-		}
-
-		return model;
-	}
 }

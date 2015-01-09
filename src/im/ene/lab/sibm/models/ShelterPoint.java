@@ -1,22 +1,15 @@
-package im.ene.lab.sibm.map.ksj.shelter;
+package im.ene.lab.sibm.models;
 
 import im.ene.lab.sibm.map.ksj.Data;
-import im.ene.lab.sibm.map.ksj.NGeoPoint;
-import im.ene.lab.sibm.models.NProperty;
-import im.ene.lab.sibm.models.Prefix;
 import im.ene.lab.sibm.util.DataUtil;
 
-import java.util.Map.Entry;
-
-import com.hp.hpl.jena.rdf.model.Literal;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ShelterPoint implements Data {
 
-	public final Prefix prefix = new Prefix("point",
-			"http://nlftp.mlit.go.jp/ksj/schemas/ksj-app/point");
+	public static final String BASE_SHELTER = "http://lab.ene.im/SIBM/thing/shelterpoint/";
+
+	private Resource resource;
 
 	private NGeoPoint geoPoint;
 
@@ -28,8 +21,13 @@ public class ShelterPoint implements Data {
 		this.geoPoint = geoPoint;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.name = name;
+
+		if (this.resource == null)
+			this.resource = DataUtil.MODEL.createResource(BASE_SHELTER + name);
+
 	}
 
 	// private String position;
@@ -108,6 +106,11 @@ public class ShelterPoint implements Data {
 
 	}
 
+	public ShelterPoint(String name) {
+		this.name = name;
+		this.resource = DataUtil.MODEL.createResource(BASE_SHELTER + name);
+	}
+
 	public String getName() {
 		return this.name;
 	}
@@ -117,65 +120,42 @@ public class ShelterPoint implements Data {
 		if (obj instanceof NGeoPoint) {
 			NGeoPoint p = (NGeoPoint) obj;
 			this.geoPoint = p;
+			this.resource.addProperty(NProperty.geopoint, p.getResource());
 		} else if (obj instanceof HazardClassification) {
 			this.hazardClassification = (HazardClassification) obj;
+			this.resource.addProperty(NProperty.hazardClassification,
+					((HazardClassification) obj).getResource());
 		} else if (obj instanceof String) {
 			String string = (String) obj;
 			if ("ksj:name".equals(tag)) {
 				this.name = string;
+				this.resource.addLiteral(NProperty.NAME, string);
 			} else if ("ksj:address".equals(tag)) {
 				this.address = string;
+				this.resource.addLiteral(NProperty.address, string);
 			} else if ("ksj:facilityType".equals(tag)) {
 				this.facilityType = string;
+				this.resource.addLiteral(NProperty.facilityType, string);
 			} else if ("ksj:seatingCapacity".equals(tag)) {
 				this.seatingCapacity = Integer.valueOf(string);
+				this.resource.addLiteral(NProperty.seatingCapacity, string);
 			} else if ("ksj:facilityScale".equals(tag)) {
 				this.facilityScale = Integer.valueOf(string);
+				this.resource.addLiteral(NProperty.facilityScale, string);
 			} else if ("ksj:administrativeAreaCode".equals(tag)) {
 				this.administrativeAreaCode = Integer.valueOf(string);
+				this.resource.addLiteral(NProperty.administrativeAreaCode,
+						string);
 			}
 		}
+	}
+
+	public Resource getResource() {
+		return this.resource;
 	}
 
 	@Override
 	public String toString() {
 		return DataUtil.GSON.toJson(this);
-	}
-
-	public Model getModel() {
-		Resource r_geoPoint = DataUtil.MODEL.createResource();
-
-		for (Entry<Property, Literal> entry : this.geoPoint.properties
-				.entrySet()) {
-			r_geoPoint.addLiteral(entry.getKey(), entry.getValue());
-		}
-
-		Resource r_hazardClassification = DataUtil.MODEL.createResource();
-
-		for (Entry<Property, Literal> entry : this.hazardClassification.properties
-				.entrySet()) {
-			r_hazardClassification.addLiteral(entry.getKey(), entry.getValue());
-		}
-
-		DataUtil.MODEL
-				.createResource()
-				.addProperty(NProperty.geopoint, r_geoPoint)
-				.addProperty(NProperty.hazardClassification,
-						r_hazardClassification)
-				.addProperty(NProperty.address,
-						DataUtil.MODEL.createTypedLiteral(this.address))
-				.addProperty(
-						NProperty.administrativeAreaCode,
-						DataUtil.MODEL
-								.createTypedLiteral(this.administrativeAreaCode))
-				.addProperty(NProperty.facilityScale,
-						DataUtil.MODEL.createTypedLiteral(this.facilityScale))
-				.addProperty(NProperty.facilityType,
-						DataUtil.MODEL.createTypedLiteral(this.facilityType))
-				.addProperty(NProperty.name,
-						DataUtil.MODEL.createTypedLiteral(this.name))
-				.addProperty(NProperty.seatingCapacity,
-						DataUtil.MODEL.createTypedLiteral(this.seatingCapacity));
-		return DataUtil.MODEL;
 	}
 }

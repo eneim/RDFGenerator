@@ -1,7 +1,7 @@
 package im.ene.lab.sibm.map.ksj.handler;
 
 import im.ene.lab.sibm.map.ksj.Data;
-import im.ene.lab.sibm.map.ksj.shelter.ShelterPoint;
+import im.ene.lab.sibm.models.ShelterPoint;
 
 import java.util.ArrayList;
 import java.util.List;

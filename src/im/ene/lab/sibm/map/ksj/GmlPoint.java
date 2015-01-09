@@ -51,4 +51,10 @@ public class GmlPoint implements Data {
 	public int hashCode() {
 		return this.x + this.y;
 	}
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+
+	}
 }

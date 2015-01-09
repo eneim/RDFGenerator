@@ -93,4 +93,10 @@ public class BusStop implements Label, Data {
 		}
 	}
 
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

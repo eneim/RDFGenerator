@@ -1,8 +1,7 @@
 package im.ene.lab.sibm;
 
 import im.ene.lab.sibm.map.ksj.shelter.ShelterDataLoaderImpl;
-import im.ene.lab.sibm.map.ksj.shelter.ShelterDataset;
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.models.Prefecture;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,13 +9,6 @@ import java.io.IOException;
 
 public class SIBM {
 	public static void main(String[] args) throws IOException {
-		int mb = 1024 * 1024;
-		long mem;
-		Runtime runtime = Runtime.getRuntime();
-		// Print free memory
-		mem = runtime.freeMemory();
-		System.out.println("Free Memory before:" + mem / mb);
-
 		/*
 		 * at titech
 		 */
@@ -41,10 +33,11 @@ public class SIBM {
 
 		int code = 10;
 
-		ShelterDataset tokyoData = shelterLoader.getShelterDataset(code);
+		Prefecture tokyo = shelterLoader.getPrefectureData(code);
 		// System.out.println(tokyoData.toString());
 		//
-		File file = new File(dir + File.separatorChar + code + ".txt");
+		File file = new File(dir + File.separatorChar + tokyo.getName()
+				+ ".txt");
 		//
 		// // if file doesnt exists, then create it
 		// if (!file.exists()) {
@@ -52,7 +45,7 @@ public class SIBM {
 		// }
 		//
 		FileOutputStream outFile = new FileOutputStream(file);
-		
+		tokyo.getResource().getModel().write(outFile, "Turtle");
 		//
 		// // FileWriter fw = new FileWriter(file.getAbsoluteFile(), false);
 		// // BufferedWriter bw = new BufferedWriter(fw);
@@ -60,18 +53,12 @@ public class SIBM {
 		// // bw.close();
 		//
 
-		DataUtil.MODEL.setNsPrefix("ksj",
-				"http://nlftp.mlit.go.jp/ksj/schemas/ksj-app/");
-		DataUtil.MODEL.setNsPrefix("gml", "http://www.opengis.net/gml/3.2/");
+		// DataUtil.MODEL.setNsPrefix("ksj",
+		// "http://nlftp.mlit.go.jp/ksj/schemas/ksj-app/");
+		// DataUtil.MODEL.setNsPrefix("gml", "http://www.opengis.net/gml/3.2/");
 
-		tokyoData.toRDF(DataUtil.MODEL).write(outFile, "RDF/XML");
+		// tokyoData.toRDF(DataUtil.MODEL).write(outFile, "RDF/XML");
 		outFile.flush();
-
-		long memAfter = runtime.freeMemory();
-		// Print free memory
-		System.out.println("Free Memory after:" + memAfter / mb);
-		System.out.println("Used mem:" + (mem - memAfter) / mb);
-
 		outFile.close();
 		// RandomProfileUtil profile = new RandomProfileUtil();
 		// NPeople[] profiles = profile.getDefault(); // 2 people at a time

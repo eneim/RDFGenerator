@@ -120,4 +120,10 @@ public class Station implements Label, Data, RailroadSection {
 		}
 		return ret;
 	}
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+
+	}
 }

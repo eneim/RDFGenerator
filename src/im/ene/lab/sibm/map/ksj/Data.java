@@ -11,4 +11,6 @@ public interface Data {
 	 *            対応するオブジェクト
 	 */
 	public void link(String tag, Object obj);
+
+	public void setName(String name);
 }

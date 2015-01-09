@@ -1,10 +1,13 @@
 package im.ene.lab.sibm.util;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -13,7 +16,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -29,6 +34,34 @@ public class DataUtil {
 			.create();
 
 	public static final Model MODEL = ModelFactory.createDefaultModel();
+
+	public static final Map<Integer, String> PREFS = new HashMap<Integer, String>();
+
+	static {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(new File("data"
+					+ File.separatorChar + "pref.csv")));
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] parts = line.split(",");
+				PREFS.put(Integer.valueOf(parts[0]), parts[1]);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 	public static File gzip(File file) {
 		File ret = null;

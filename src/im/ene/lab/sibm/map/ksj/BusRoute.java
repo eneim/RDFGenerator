@@ -136,4 +136,10 @@ public class BusRoute implements Data {
 		}
 	}
 
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

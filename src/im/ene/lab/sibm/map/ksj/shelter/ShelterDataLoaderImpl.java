@@ -1,6 +1,8 @@
 package im.ene.lab.sibm.map.ksj.shelter;
 
 import im.ene.lab.sibm.map.ksj.handler.ShelterDataHandler;
+import im.ene.lab.sibm.models.Prefecture;
+import im.ene.lab.sibm.models.ShelterPoint;
 import im.ene.lab.sibm.util.DataUtil;
 import im.ene.lab.sibm.util.GeneralFileFilter;
 
@@ -101,6 +103,16 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		ShelterPoint[] points = readShelterGML(prefCode);
 		dataSet.setShelterPoints(points);
 		return dataSet;
+	}
+
+	public Prefecture getPrefectureData(int code) {
+		if (!DataUtil.PREFS.containsKey(code))
+			return null;
+
+		ShelterPoint[] points = readShelterGML(code);
+		Prefecture pref = new Prefecture(DataUtil.PREFS.get(code), code);
+		pref.setShelterPoints(points);
+		return pref;
 	}
 
 	@Override
