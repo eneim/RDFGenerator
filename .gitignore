@@ -32,5 +32,6 @@ local.properties
 .settings/
 
 # this project only
-data/
-shelter_data/
+/data/
+/shelter_data/
+/sibm/
