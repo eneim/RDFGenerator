@@ -20,6 +20,16 @@ public class Prefecture {
 		return shelterPoints;
 	}
 
+	public void setShelterPoint(ShelterPoint[] shelterPoints) {
+		this.shelterPoints = shelterPoints;
+
+		if (shelterPoints == null || shelterPoints.length < 1)
+			return;
+
+		this.resource.addProperty(NProperty.hasShelterPoint,
+				shelterPoints[0].getResource());
+	}
+
 	public void setShelterPoints(ShelterPoint[] shelterPoints) {
 		this.shelterPoints = shelterPoints;
 

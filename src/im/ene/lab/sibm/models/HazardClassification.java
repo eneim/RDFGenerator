@@ -35,24 +35,27 @@ public class HazardClassification implements Data {
 			if ("ksj:earthquakeHazard".equals(tag)) {
 				this.earthquakeHazard = availability;
 				this.resource.addLiteral(NProperty.earthquakeHazard,
-						availability);
+						DataUtil.MODEL.createTypedLiteral(availability));
 			} else if ("ksj:tsunamiHazard".equals(tag)) {
 				this.tsunamiHazard = availability;
-				this.resource.addLiteral(NProperty.tsunamiHazard, availability);
+				this.resource.addLiteral(NProperty.tsunamiHazard,
+						DataUtil.MODEL.createTypedLiteral(availability));
 			} else if ("ksj:windAndFloodDamage".equals(tag)) {
 				this.windAndFloodDamage = availability;
 				this.resource.addLiteral(NProperty.windAndFloodDamage,
-						availability);
+						DataUtil.MODEL.createTypedLiteral(availability));
 			} else if ("ksj:volcanicHazard".equals(tag)) {
 				this.volcanicHazard = availability;
-				this.resource
-						.addLiteral(NProperty.volcanicHazard, availability);
+				this.resource.addLiteral(NProperty.volcanicHazard,
+						DataUtil.MODEL.createTypedLiteral(availability));
 			} else if ("ksj:other".equals(tag)) {
 				this.other = availability;
-				this.resource.addLiteral(NProperty.other, availability);
+				this.resource.addLiteral(NProperty.other,
+						DataUtil.MODEL.createTypedLiteral(availability));
 			} else if ("ksj:notSpecified".equals(tag)) {
 				this.notSpecified = availability;
-				this.resource.addLiteral(NProperty.notSpecified, availability);
+				this.resource.addLiteral(NProperty.notSpecified,
+						DataUtil.MODEL.createTypedLiteral(availability));
 			}
 		}
 	}

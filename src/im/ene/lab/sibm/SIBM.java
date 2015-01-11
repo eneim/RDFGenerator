@@ -1,7 +1,12 @@
 package im.ene.lab.sibm;
 
 import im.ene.lab.sibm.map.ksj.shelter.ShelterDataLoaderImpl;
+import im.ene.lab.sibm.models.NPerson;
+import im.ene.lab.sibm.models.NProperty;
+import im.ene.lab.sibm.models.NUserType;
 import im.ene.lab.sibm.models.Prefecture;
+import im.ene.lab.sibm.models.ShelterPoint;
+import im.ene.lab.sibm.util.RandomProfileUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,8 +17,8 @@ public class SIBM {
 		/*
 		 * at titech
 		 */
-		System.setProperty("http.proxyHost", "proxy.noc.titech.ac.jp");
-		System.setProperty("http.proxyPort", "3128");
+//		System.setProperty("http.proxyHost", "proxy.noc.titech.ac.jp");
+//		System.setProperty("http.proxyPort", "3128");
 
 		String dir = args.length > 0 ? args[0] : "sibm";
 
@@ -31,12 +36,11 @@ public class SIBM {
 		// mgr.getBusDataset(13);
 		// mgr.getKsjFile(20);
 
-		int code = 10;
+		int code = 12;
 
-		Prefecture tokyo = shelterLoader.getPrefectureData(code);
-		// System.out.println(tokyoData.toString());
-		//
-		File file = new File(dir + File.separatorChar + tokyo.getName()
+		Prefecture prefDataset = shelterLoader.getPrefectureData(code);
+
+		File file = new File(dir + File.separatorChar + prefDataset.getName()
 				+ ".txt");
 		//
 		// // if file doesnt exists, then create it
@@ -44,8 +48,26 @@ public class SIBM {
 		// file.createNewFile();
 		// }
 		//
+
+		RandomProfileUtil pUtil = new RandomProfileUtil();
+		int max = 10;
+		while (max > 0) {
+			max--;
+			NPerson p = pUtil.getDefault();
+
+			synchronized (p) {
+				p.setType(NUserType.TYPES[(int) (Math.random() * 3)]);
+
+				ShelterPoint randomPoint = prefDataset.getShelterPoints()[0];
+				p.getResource().addProperty(NProperty.stayAt,
+						randomPoint.getResource());
+			}
+
+		}
+
 		FileOutputStream outFile = new FileOutputStream(file);
-		tokyo.getResource().getModel().write(outFile, "Turtle");
+		prefDataset.getResource().getModel().write(outFile, "Turtle");
+
 		//
 		// // FileWriter fw = new FileWriter(file.getAbsoluteFile(), false);
 		// // BufferedWriter bw = new BufferedWriter(fw);
@@ -66,5 +88,9 @@ public class SIBM {
 		// if (profiles != null && profiles.length >= 1)
 		// System.out.println(DataUtil.GSON.toJson(profiles[0]));
 
+	}
+	
+	private static boolean validate(String command) {
+		return command.startsWith("-");	
 	}
 }

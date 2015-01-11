@@ -47,8 +47,10 @@ public class NGeoPoint implements Data {
 			this.lat = point.getX();
 			this.lng = point.getY();
 
-			this.resource.addLiteral(NProperty.latitude, point.getX());
-			this.resource.addLiteral(NProperty.longtitude, point.getY());
+			this.resource.addLiteral(NProperty.latitude,
+					DataUtil.MODEL.createTypedLiteral(point.getX()));
+			this.resource.addLiteral(NProperty.longtitude,
+					DataUtil.MODEL.createTypedLiteral(point.getY()));
 		}
 	}
 

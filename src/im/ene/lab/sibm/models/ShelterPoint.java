@@ -138,14 +138,20 @@ public class ShelterPoint implements Data {
 				this.resource.addLiteral(NProperty.facilityType, string);
 			} else if ("ksj:seatingCapacity".equals(tag)) {
 				this.seatingCapacity = Integer.valueOf(string);
-				this.resource.addLiteral(NProperty.seatingCapacity, string);
+				this.resource
+						.addLiteral(NProperty.seatingCapacity, DataUtil.MODEL
+								.createTypedLiteral(this.seatingCapacity));
 			} else if ("ksj:facilityScale".equals(tag)) {
 				this.facilityScale = Integer.valueOf(string);
-				this.resource.addLiteral(NProperty.facilityScale, string);
+				this.resource.addLiteral(NProperty.facilityScale,
+						DataUtil.MODEL.createTypedLiteral(this.facilityScale));
 			} else if ("ksj:administrativeAreaCode".equals(tag)) {
 				this.administrativeAreaCode = Integer.valueOf(string);
-				this.resource.addLiteral(NProperty.administrativeAreaCode,
-						string);
+				this.resource
+						.addLiteral(
+								NProperty.administrativeAreaCode,
+								DataUtil.MODEL
+										.createTypedLiteral(this.administrativeAreaCode));
 			}
 		}
 	}

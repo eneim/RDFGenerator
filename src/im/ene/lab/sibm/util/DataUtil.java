@@ -27,17 +27,26 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.vocabulary.XSD;
 
 public class DataUtil {
 
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting()
 			.create();
 
+	protected static final String sibm = "http://lab.ene.im/SIBM/property#";
+
+	protected static final String sibm_geo = "http://lab.ene.im/SIBM/property/geo#";
+	
 	public static final Model MODEL = ModelFactory.createDefaultModel();
 
 	public static final Map<Integer, String> PREFS = new HashMap<Integer, String>();
 
 	static {
+		MODEL.setNsPrefix("sibm", sibm);
+		MODEL.setNsPrefix("geo", sibm_geo);
+		MODEL.setNsPrefix("xsd", XSD.getURI());
+		
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(new File("data"

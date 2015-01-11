@@ -47,7 +47,14 @@ public class NProperty {
 	public static final Property latitude;
 	public static final Property longtitude;
 
+	public static final Property userType, accessLevel;
+	public static final Property profile, userID, firstName, surname, gender,
+			birthday, age, phone, zipCode, email, occupation;
+
+	public static final Property stayAt;
+
 	static {
+
 		earthquakeHazard = m.createProperty(sibm + "earthquakeHazard");
 		tsunamiHazard = m.createProperty(sibm + "tsunamiHazard");
 		windAndFloodDamage = m.createProperty(sibm + "windAndFloodDamage");
@@ -59,8 +66,26 @@ public class NProperty {
 		longtitude = m.createProperty(sibm_geo + "longtitude");
 
 		ID = m.createProperty(sibm + "ID");
-		CODE = m.createProperty(sibm + "CODE");
+		CODE = m.createProperty(sibm + "code");
 		hasShelterPoint = m.createProperty(sibm + "hasShelterPoint");
+
+		userType = m.createProperty(sibm + "type");
+		accessLevel = m.createProperty(sibm + "accessLevel");
+		profile = m.createProperty(sibm + "profile");
+
+		userID = m.createProperty(sibm + "userID");
+		firstName = m.createProperty(sibm + "firstName");
+		surname = m.createProperty(sibm + "surName");
+		gender = m.createProperty(sibm + "gender");
+		birthday = m.createProperty(sibm + "birthday");
+		age = m.createProperty(sibm + "age");
+		phone = m.createProperty(sibm + "phone");
+
+		zipCode = m.createProperty(sibm + "zipCode");
+		email = m.createProperty(sibm + "email");
+		occupation = m.createProperty(sibm + "occupation");
+
+		stayAt = m.createProperty(sibm + "stayAt");
 	}
 
 }

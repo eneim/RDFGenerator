@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.IllegalSelectorException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -111,7 +112,8 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 
 		ShelterPoint[] points = readShelterGML(code);
 		Prefecture pref = new Prefecture(DataUtil.PREFS.get(code), code);
-		pref.setShelterPoints(points);
+		// pref.setShelterPoints(points);
+		pref.setShelterPoint(points);
 		return pref;
 	}
 
@@ -119,7 +121,6 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 	public ShelterPoint[] readShelterGML(int code) {
 		long t0 = System.nanoTime();
 
-		// P20-12_13
 		File file = new File(this.orgDir
 				+ File.separatorChar
 				+ String.format("%02d" + File.separatorChar
