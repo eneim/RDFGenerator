@@ -1,57 +1,113 @@
 package im.ene.lab.sibm;
 
-import im.ene.lab.sibm.models.NProperty;
+import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.dataofjapan.Region;
 
-import com.hp.hpl.jena.ontology.Individual;
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.VCARD;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
+		/*
+		 * at titech
+		 */
+		// System.setProperty("http.proxyHost", "proxy.noc.titech.ac.jp");
+		// System.setProperty("http.proxyPort", "3128");
 
-		OntModel ontModel = ModelFactory.createOntologyModel();
-		ontModel.setNsPrefix("sibm", "http://lab.ene.im/SIBM/owl/sibm.owl#");
+		String dir = "sibm";
 
-		OntClass nPerson = ontModel.createClass(ontModel.getNsPrefixURI("sibm")
-				+ "Person");
-		OntClass nAddress = ontModel.createClass(ontModel
-				.getNsPrefixURI("sibm") + "Address");
+		// ShelterDataLoaderImpl shelterLoader = new ShelterDataLoaderImpl(dir
+		// + File.separatorChar + "original", dir + File.separatorChar
+		// + "csv");
+		//
+		// int code = 12;
+		//
+		// NPrefecture prefDataset = shelterLoader.getPrefectureData(code);
+		//
+		// File file = new File(dir + File.separatorChar + prefDataset.getName()
+		// + ".txt");
+		// //
+		// // // if file doesnt exists, then create it
+		// // if (!file.exists()) {
+		// // file.createNewFile();
+		// // }
+		// //
+		//
+		// RandomProfileUtil pUtil = new RandomProfileUtil();
+		// int max = 30;
+		// while (max > 0) {
+		// max--;
+		//
+		// try {
+		// // NPerson p = pUtil.getDefault();
+		//
+		// NPerson p = Generator.genPerson();
+		//
+		// if (p != null)
+		// synchronized (p) {
+		// // p.setType(NUserType.TYPES[(int) (Math.random() *
+		// // 3)]);
+		//
+		// ShelterPoint randomPoint = prefDataset
+		// .getShelterPoints()[Generator.genRandomInt(0,
+		// prefDataset.getShelterPointCount() - 1)];
+		//
+		// prefDataset
+		// .getResource()
+		// .getModel()
+		// .add(p.getResource()
+		// .addProperty(NProperty.stayAt,
+		// randomPoint.getResource())
+		// .getModel());
+		// }
+		// } catch (Exception er) {
+		// er.printStackTrace();
+		// }
+		//
+		// }
+		//
+		// FileOutputStream outFile = new FileOutputStream(file);
+		// prefDataset.getResource().getModel().write(outFile, "Turtle");
+		//
+		// //
+		// // // FileWriter fw = new FileWriter(file.getAbsoluteFile(), false);
+		// // // BufferedWriter bw = new BufferedWriter(fw);
+		// // // bw.write(tokyoData.toString());
+		// // // bw.close();
+		// //
+		//
+		// // DataUtil.MODEL.setNsPrefix("ksj",
+		// // "http://nlftp.mlit.go.jp/ksj/schemas/ksj-app/");
+		// // DataUtil.MODEL.setNsPrefix("gml",
+		// "http://www.opengis.net/gml/3.2/");
+		//
+		// // tokyoData.toRDF(DataUtil.MODEL).write(outFile, "RDF/XML");
+		// outFile.flush();
+		// outFile.close();
+		// RandomProfileUtil profile = new RandomProfileUtil();
+		// NPeople[] profiles = profile.getDefault(); // 2 people at a time
+		//
+		// if (profiles != null && profiles.length >= 1)
+		// System.out.println(DataUtil.GSON.toJson(profiles[0]));
 
-		Individual p1 = nPerson
-				.createIndividual("http://lab.ene.im/SIBM/thing/person/person1");
-		p1.addProperty(VCARD.BDAY, "Aug 5th, 1989").addProperty(VCARD.NAME,
-				"Nam Nguyen");
-
-		Individual add1 = nAddress
-				.createIndividual("http://lab.ene.im/SIBM/thing/place/address1");
-		add1.addProperty(VCARD.NAME, "Tokyo").addProperty(VCARD.CATEGORIES,
-				"Capital");
-
-		p1.addProperty(VCARD.ADR, add1);
-		// p1.getModel().write(System.out, "Turtle");
-
-		Model model = ModelFactory.createDefaultModel();
-		model.setNsPrefix("sibm", "http://lab.ene.im/SIBM/owl/sibm.owl#");
-		model.setNsPrefix("gml", "http://www.opengis.net/gml/3.2#");
-
-		Resource rP1 = model
-				.createResource("http://lab.ene.im/SIBM/thing/person/person1")
-				.addLiteral(VCARD.BDAY, "Aug 5th, 1989")
-				.addLiteral(VCARD.NAME, "Nam Nguyen");
-
-		Resource rAdd1 = model
-				.createResource("http://lab.ene.im/SIBM/thing/place/address1")
-				.addLiteral(VCARD.NAME, "Tokyo")
-				.addLiteral(VCARD.CATEGORIES, "Capital");
-
-		rP1.addProperty(NProperty.geopoint, rAdd1);
-		rP1.getModel().write(System.out, "Turtle");
-
+		FileReader reader = new FileReader(dir + File.separatorChar
+				+ "regions.json");
+		List<Region> regions = DataUtil.GSON.fromJson(reader,
+				new TypeToken<List<Region>>() {
+				}.getType());
+		
+		int total = 0;
+		
+		for (Region region : regions) {
+			total += region.shelterCount;
+		}
+		
+		System.out.print(total);
 	}
 
 }

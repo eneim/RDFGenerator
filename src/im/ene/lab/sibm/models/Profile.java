@@ -1,10 +1,6 @@
 package im.ene.lab.sibm.models;
 
-import im.ene.lab.sibm.util.DataUtil;
-
 import javax.annotation.Generated;
-
-import com.hp.hpl.jena.rdf.model.Resource;
 
 @Generated("org.jsonschema2pojo")
 public class Profile {

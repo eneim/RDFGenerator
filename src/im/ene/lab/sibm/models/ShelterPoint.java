@@ -3,11 +3,15 @@ package im.ene.lab.sibm.models;
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.DataUtil;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ShelterPoint implements Data {
 
 	public static final String BASE_SHELTER = "http://lab.ene.im/SIBM/thing/shelterpoint/";
+
+	private Model model = DataUtil.createModel();
 
 	private Resource resource;
 
@@ -26,7 +30,7 @@ public class ShelterPoint implements Data {
 		this.name = name;
 
 		if (this.resource == null)
-			this.resource = DataUtil.MODEL.createResource(BASE_SHELTER + name);
+			this.resource = model.createResource(BASE_SHELTER + name);
 
 	}
 
@@ -108,7 +112,7 @@ public class ShelterPoint implements Data {
 
 	public ShelterPoint(String name) {
 		this.name = name;
-		this.resource = DataUtil.MODEL.createResource(BASE_SHELTER + name);
+		this.resource = model.createResource(BASE_SHELTER + name);
 	}
 
 	public String getName() {
@@ -121,10 +125,14 @@ public class ShelterPoint implements Data {
 			NGeoPoint p = (NGeoPoint) obj;
 			this.geoPoint = p;
 			this.resource.addProperty(NProperty.geopoint, p.getResource());
+			
+			this.resource.getModel().add(this.geoPoint.getResource().getModel());
 		} else if (obj instanceof HazardClassification) {
 			this.hazardClassification = (HazardClassification) obj;
 			this.resource.addProperty(NProperty.hazardClassification,
-					((HazardClassification) obj).getResource());
+					this.hazardClassification.getResource());
+			
+			this.resource.getModel().add(this.hazardClassification.getResource().getModel());
 		} else if (obj instanceof String) {
 			String string = (String) obj;
 			if ("ksj:name".equals(tag)) {
@@ -138,20 +146,16 @@ public class ShelterPoint implements Data {
 				this.resource.addLiteral(NProperty.facilityType, string);
 			} else if ("ksj:seatingCapacity".equals(tag)) {
 				this.seatingCapacity = Integer.valueOf(string);
-				this.resource
-						.addLiteral(NProperty.seatingCapacity, DataUtil.MODEL
-								.createTypedLiteral(this.seatingCapacity));
+				this.resource.addLiteral(NProperty.seatingCapacity,
+						model.createTypedLiteral(this.seatingCapacity));
 			} else if ("ksj:facilityScale".equals(tag)) {
 				this.facilityScale = Integer.valueOf(string);
 				this.resource.addLiteral(NProperty.facilityScale,
-						DataUtil.MODEL.createTypedLiteral(this.facilityScale));
+						model.createTypedLiteral(this.facilityScale));
 			} else if ("ksj:administrativeAreaCode".equals(tag)) {
 				this.administrativeAreaCode = Integer.valueOf(string);
-				this.resource
-						.addLiteral(
-								NProperty.administrativeAreaCode,
-								DataUtil.MODEL
-										.createTypedLiteral(this.administrativeAreaCode));
+				this.resource.addLiteral(NProperty.administrativeAreaCode,
+						model.createTypedLiteral(this.administrativeAreaCode));
 			}
 		}
 	}

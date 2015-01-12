@@ -1,7 +1,7 @@
 package im.ene.lab.sibm.map.ksj.shelter;
 
 import im.ene.lab.sibm.map.ksj.handler.ShelterDataHandler;
-import im.ene.lab.sibm.models.Prefecture;
+import im.ene.lab.sibm.models.NPrefecture;
 import im.ene.lab.sibm.models.ShelterPoint;
 import im.ene.lab.sibm.util.DataUtil;
 import im.ene.lab.sibm.util.GeneralFileFilter;
@@ -106,14 +106,14 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		return dataSet;
 	}
 
-	public Prefecture getPrefectureData(int code) {
+	public NPrefecture getPrefectureData(int code) {
 		if (!DataUtil.PREFS.containsKey(code))
 			return null;
 
 		ShelterPoint[] points = readShelterGML(code);
-		Prefecture pref = new Prefecture(DataUtil.PREFS.get(code), code);
-		// pref.setShelterPoints(points);
-		pref.setShelterPoint(points);
+		NPrefecture pref = new NPrefecture(DataUtil.PREFS.get(code), code);
+		pref.setShelterPoints(points);
+		// pref.setShelterPoint(points[0]);
 		return pref;
 	}
 
@@ -142,7 +142,8 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 
 		System.out.printf("P20 %02d: %dms\n", code,
 				(System.nanoTime() - t0) / 1000000);
-		System.out.println("Data retrieved: " + (points == null ? "null" : ""));
+		// System.out.println("Data retrieved: " + (points == null ? "null" :
+		// ""));
 
 		return points;
 	}

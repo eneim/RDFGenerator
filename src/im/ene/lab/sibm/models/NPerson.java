@@ -4,9 +4,10 @@ import im.ene.lab.sibm.util.DataUtil;
 
 import javax.annotation.Generated;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.VCARD;
 
 @Generated("org.jsonschema2pojo")
 public class NPerson {
@@ -44,11 +45,12 @@ public class NPerson {
 		this.profile = profile;
 	}
 
-	public Resource getResource() {
-		this.resource = DataUtil.MODEL.createResource(BASE_PERSON
-				+ profile.getUserID());
+	private Model model = DataUtil.createModel();
 
-		Resource res = DataUtil.MODEL.createResource();
+	public Resource getResource() {
+		this.resource = model.createResource(BASE_PERSON + profile.getUserID());
+
+		Resource res = ModelFactory.createDefaultModel().createResource();
 		res.addLiteral(NProperty.userID, profile.getUserID())
 				.addLiteral(NProperty.firstName, profile.getFirstName())
 				.addLiteral(NProperty.surname, profile.getSurname())
@@ -61,9 +63,17 @@ public class NPerson {
 				.addLiteral(NProperty.email, profile.getEmail())
 		// .addLiteral(NProperty.occupation, profile.getOccupation())
 		;
-		this.resource.addProperty(NProperty.profile, res).addProperty(
-				RDF.type, getType().getResource());
+		
+		this.resource.addProperty(NProperty.profile, res).addProperty(RDF.type,
+				getType().getResource());
+		this.resource.getModel().add(res.getModel())
+				.add(getType().getResource().getModel());
 
 		return this.resource;
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 }

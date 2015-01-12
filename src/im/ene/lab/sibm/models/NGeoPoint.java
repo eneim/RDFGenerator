@@ -4,18 +4,22 @@ import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.map.ksj.NPoint;
 import im.ene.lab.sibm.util.DataUtil;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class NGeoPoint implements Data {
 
 	private Resource resource;
 
+	private Model model = DataUtil.createModel();
+	
 	public NGeoPoint() {
-		this.resource = DataUtil.MODEL.createResource();
+		this.resource = model.createResource();
 	}
 
 	public NGeoPoint(String name) {
-		this.resource = DataUtil.MODEL.createResource(BASE_GEOPOINT + name);
+		this.resource = model.createResource(BASE_GEOPOINT + name);
 	}
 
 	public static final String BASE_GEOPOINT = "http://lab.ene.im/SIBM/thing/geopoint/";
@@ -46,15 +50,15 @@ public class NGeoPoint implements Data {
 			NPoint point = (NPoint) obj;
 			this.lat = point.getX();
 			this.lng = point.getY();
-
-			this.resource.addLiteral(NProperty.latitude,
-					DataUtil.MODEL.createTypedLiteral(point.getX()));
-			this.resource.addLiteral(NProperty.longtitude,
-					DataUtil.MODEL.createTypedLiteral(point.getY()));
+			
 		}
 	}
 
 	public Resource getResource() {
+		this.resource.addLiteral(NProperty.latitude,
+				model.createTypedLiteral(this.lat));
+		this.resource.addLiteral(NProperty.longtitude,
+				model.createTypedLiteral(this.lng));
 		return this.resource;
 	}
 
@@ -69,7 +73,7 @@ public class NGeoPoint implements Data {
 		this.name = name;
 
 		if (this.resource == null)
-			this.resource = DataUtil.MODEL.createResource(BASE_GEOPOINT + name);
+			this.resource = model.createResource(BASE_GEOPOINT + name);
 	}
 
 }

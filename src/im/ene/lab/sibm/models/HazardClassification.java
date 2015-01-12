@@ -3,6 +3,8 @@ package im.ene.lab.sibm.models;
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.DataUtil;
 
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class HazardClassification implements Data {
@@ -16,16 +18,17 @@ public class HazardClassification implements Data {
 	public boolean other;
 	public boolean notSpecified;
 
+	private Model model = DataUtil.createModel();
 	private Resource resource;
 
 	private String name;
 
 	public HazardClassification() {
-		this.resource = DataUtil.MODEL.createResource();
+		this.resource = model.createResource();
 	}
 
 	public HazardClassification(String name) {
-		this.resource = DataUtil.MODEL.createResource(BASE_HZTYPE + name);
+		this.resource = model.createResource(BASE_HZTYPE + name);
 	}
 
 	@Override
@@ -34,33 +37,39 @@ public class HazardClassification implements Data {
 			boolean availability = Boolean.valueOf((String) obj);
 			if ("ksj:earthquakeHazard".equals(tag)) {
 				this.earthquakeHazard = availability;
-				this.resource.addLiteral(NProperty.earthquakeHazard,
-						DataUtil.MODEL.createTypedLiteral(availability));
+
 			} else if ("ksj:tsunamiHazard".equals(tag)) {
 				this.tsunamiHazard = availability;
-				this.resource.addLiteral(NProperty.tsunamiHazard,
-						DataUtil.MODEL.createTypedLiteral(availability));
+
 			} else if ("ksj:windAndFloodDamage".equals(tag)) {
 				this.windAndFloodDamage = availability;
-				this.resource.addLiteral(NProperty.windAndFloodDamage,
-						DataUtil.MODEL.createTypedLiteral(availability));
+
 			} else if ("ksj:volcanicHazard".equals(tag)) {
 				this.volcanicHazard = availability;
-				this.resource.addLiteral(NProperty.volcanicHazard,
-						DataUtil.MODEL.createTypedLiteral(availability));
+
 			} else if ("ksj:other".equals(tag)) {
 				this.other = availability;
-				this.resource.addLiteral(NProperty.other,
-						DataUtil.MODEL.createTypedLiteral(availability));
+
 			} else if ("ksj:notSpecified".equals(tag)) {
 				this.notSpecified = availability;
-				this.resource.addLiteral(NProperty.notSpecified,
-						DataUtil.MODEL.createTypedLiteral(availability));
+
 			}
 		}
 	}
 
 	public Resource getResource() {
+		this.resource.addLiteral(NProperty.earthquakeHazard,
+				model.createTypedLiteral(this.earthquakeHazard));
+		this.resource.addLiteral(NProperty.tsunamiHazard,
+				model.createTypedLiteral(this.tsunamiHazard));
+		this.resource.addLiteral(NProperty.windAndFloodDamage,
+				model.createTypedLiteral(this.windAndFloodDamage));
+		this.resource.addLiteral(NProperty.volcanicHazard,
+				model.createTypedLiteral(this.volcanicHazard));
+		this.resource.addLiteral(NProperty.other,
+				model.createTypedLiteral(this.other));
+		this.resource.addLiteral(NProperty.notSpecified,
+				model.createTypedLiteral(this.notSpecified));
 		return this.resource;
 	}
 
@@ -68,8 +77,7 @@ public class HazardClassification implements Data {
 	public void setName(String name) {
 		this.name = name;
 
-		if (this.resource == null)
-			this.resource = DataUtil.MODEL.createResource(BASE_HZTYPE + name);
+		this.resource = model.createResource(BASE_HZTYPE + name);
 	}
 
 	public String getName() {

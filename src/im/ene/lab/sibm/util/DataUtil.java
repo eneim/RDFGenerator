@@ -37,7 +37,7 @@ public class DataUtil {
 	protected static final String sibm = "http://lab.ene.im/SIBM/property#";
 
 	protected static final String sibm_geo = "http://lab.ene.im/SIBM/property/geo#";
-	
+
 	public static final Model MODEL = ModelFactory.createDefaultModel();
 
 	public static final Map<Integer, String> PREFS = new HashMap<Integer, String>();
@@ -46,7 +46,7 @@ public class DataUtil {
 		MODEL.setNsPrefix("sibm", sibm);
 		MODEL.setNsPrefix("geo", sibm_geo);
 		MODEL.setNsPrefix("xsd", XSD.getURI());
-		
+
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(new File("data"
@@ -70,6 +70,14 @@ public class DataUtil {
 			}
 		}
 
+	}
+
+	public static Model createModel() {
+		Model model = ModelFactory.createDefaultModel();
+		model.setNsPrefix("sibm", sibm);
+		model.setNsPrefix("geo", sibm_geo);
+		model.setNsPrefix("xsd", XSD.getURI());
+		return model;
 	}
 
 	public static File gzip(File file) {
@@ -331,4 +339,5 @@ public class DataUtil {
 		return ret;
 	}
 
+	public static final int[] HOKKAIDO = {1};
 }
