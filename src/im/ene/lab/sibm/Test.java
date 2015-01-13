@@ -1,18 +1,21 @@
 package im.ene.lab.sibm;
 
+import im.ene.lab.sibm.map.ksj.shelter.ShelterDataLoaderImpl;
+import im.ene.lab.sibm.models.NPrefecture;
 import im.ene.lab.sibm.util.DataUtil;
 import im.ene.lab.sibm.util.dataofjapan.Region;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
 public class Test {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		/*
 		 * at titech
 		 */
@@ -21,21 +24,22 @@ public class Test {
 
 		String dir = "sibm";
 
-		// ShelterDataLoaderImpl shelterLoader = new ShelterDataLoaderImpl(dir
-		// + File.separatorChar + "original", dir + File.separatorChar
-		// + "csv");
+		ShelterDataLoaderImpl shelterLoader = new ShelterDataLoaderImpl(dir
+				+ File.separatorChar + "original", dir + File.separatorChar
+				+ "csv");
 		//
-		// int code = 12;
+		int code = 12;
 		//
-		// NPrefecture prefDataset = shelterLoader.getPrefectureData(code);
+		NPrefecture prefDataset = shelterLoader.getPrefectureData(code);
 		//
-		// File file = new File(dir + File.separatorChar + prefDataset.getName()
-		// + ".txt");
-		// //
-		// // // if file doesnt exists, then create it
-		// // if (!file.exists()) {
-		// // file.createNewFile();
-		// // }
+		File file = new File(dir + File.separatorChar + prefDataset.getName()
+				+ ".txt");
+		//
+		// // if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		
 		// //
 		//
 		// RandomProfileUtil pUtil = new RandomProfileUtil();
@@ -71,8 +75,8 @@ public class Test {
 		//
 		// }
 		//
-		// FileOutputStream outFile = new FileOutputStream(file);
-		// prefDataset.getResource().getModel().write(outFile, "Turtle");
+		FileOutputStream outFile = new FileOutputStream(file);
+		prefDataset.getResource().getModel().write(outFile, "Turtle");
 		//
 		// //
 		// // // FileWriter fw = new FileWriter(file.getAbsoluteFile(), false);
@@ -100,13 +104,13 @@ public class Test {
 		List<Region> regions = DataUtil.GSON.fromJson(reader,
 				new TypeToken<List<Region>>() {
 				}.getType());
-		
+
 		int total = 0;
-		
+
 		for (Region region : regions) {
 			total += region.shelterCount;
 		}
-		
+
 		System.out.print(total);
 	}
 

@@ -106,11 +106,39 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		return dataSet;
 	}
 
+	public ShelterDataset getShelterDataset(int prefCode, int maxPointCount) {
+		ShelterDataset dataSet = new ShelterDataset();
+		ShelterPoint[] points = readShelterGML(prefCode);
+
+		if (points.length > maxPointCount) {
+			points = Arrays.copyOf(points, maxPointCount);
+		}
+
+		dataSet.setShelterPoints(points);
+		return dataSet;
+	}
+
 	public NPrefecture getPrefectureData(int code) {
 		if (!DataUtil.PREFS.containsKey(code))
 			return null;
 
 		ShelterPoint[] points = readShelterGML(code);
+		NPrefecture pref = new NPrefecture(DataUtil.PREFS.get(code), code);
+		pref.setShelterPoints(points);
+		// pref.setShelterPoint(points[0]);
+		return pref;
+	}
+
+	public NPrefecture getPrefectureData(int code, int max) {
+		if (!DataUtil.PREFS.containsKey(code))
+			return null;
+
+		ShelterPoint[] points = readShelterGML(code);
+
+		if (points.length > max) {
+			points = Arrays.copyOf(points, max);
+		}
+
 		NPrefecture pref = new NPrefecture(DataUtil.PREFS.get(code), code);
 		pref.setShelterPoints(points);
 		// pref.setShelterPoint(points[0]);
