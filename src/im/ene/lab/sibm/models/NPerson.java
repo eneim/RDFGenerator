@@ -28,6 +28,42 @@ public class NPerson {
 
 	private Profile profile;
 
+	private NPerson father, mother, spouse;
+
+	public NPerson getFather() {
+		return father;
+	}
+
+	public void setFather(NPerson father) {
+		this.father = father;
+	}
+
+	public NPerson getMother() {
+		return mother;
+	}
+
+	public void setMother(NPerson mother) {
+		this.mother = mother;
+	}
+
+	public NPerson getSpouse() {
+		return spouse;
+	}
+
+	public void setSpouse(NPerson spouse) {
+		this.spouse = spouse;
+	}
+
+	public NPerson[] getChildren() {
+		return children;
+	}
+
+	public void setChildren(NPerson[] children) {
+		this.children = children;
+	}
+
+	private NPerson[] children;
+
 	/**
 	 * 
 	 * @return The profile
@@ -48,6 +84,9 @@ public class NPerson {
 	private Model model = DataUtil.createModel();
 
 	public Resource getResource() {
+		if (profile == null)
+			return null;
+
 		this.resource = model.createResource(BASE_PERSON + profile.getUserID());
 
 		Resource res = ModelFactory.createDefaultModel().createResource();
@@ -63,15 +102,35 @@ public class NPerson {
 				.addLiteral(NProperty.email, profile.getEmail())
 		// .addLiteral(NProperty.occupation, profile.getOccupation())
 		;
-		
+
 		this.resource.addProperty(NProperty.profile, res).addProperty(RDF.type,
 				getType().getResource());
+
+		if (this.getFather() != null && this.getFather().getResource() != null)
+			this.resource.addProperty(NProperty.hasFather, this.getFather()
+					.getResource());
+
+		if (this.getMother() != null && this.getMother().getResource() != null)
+			this.resource.addProperty(NProperty.hasMother, this.getMother()
+					.getResource());
+
+		if (this.getSpouse() != null && this.getSpouse().getResource() != null)
+			this.resource.addProperty(NProperty.hasSpouse, this.getSpouse()
+					.getResource());
+
+		if (this.getChildren() != null && this.getChildren().length > 0) {
+			for (NPerson child : this.getChildren())
+				if (child.getResource() != null)
+					this.resource.addProperty(NProperty.hasChild,
+							child.getResource());
+		}
+
 		this.resource.getModel().add(res.getModel())
 				.add(getType().getResource().getModel());
 
 		return this.resource;
 	}
-	
+
 	@Override
 	public String toString() {
 		return super.toString();

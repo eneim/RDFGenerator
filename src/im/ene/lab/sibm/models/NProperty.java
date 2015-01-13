@@ -87,5 +87,10 @@ public class NProperty {
 
 		stayAt = m.createProperty(sibm + "stayAt");
 	}
+	
+	public static final Property hasFather = m.createProperty(sibm + "hasFather");
+	public static final Property hasMother = m.createProperty(sibm + "hasMother");
+	public static final Property hasSpouse = m.createProperty(sibm + "hasSpouse");
+	public static final Property hasChild = m.createProperty(sibm + "hasChild");
 
 }

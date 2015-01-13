@@ -3,6 +3,8 @@ package im.ene.lab.sibm.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import im.ene.lab.sibm.util.DataUtil;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -22,9 +24,9 @@ public class NPrefecture {
 	private ShelterPoint[] shelterPoints;
 
 	private List<ShelterPoint> invalidPoinst = new ArrayList<ShelterPoint>();
-	
+
 	private int pointCount = 0;
-	
+
 	public ShelterPoint[] getShelterPoints() {
 		return shelterPoints;
 	}
@@ -39,14 +41,19 @@ public class NPrefecture {
 	public void setShelterPoints(ShelterPoint[] shelterPoints) {
 		if (shelterPoints == null || shelterPoints.length < 1)
 			return;
+
+		this.shelterPoints = new ShelterPoint[shelterPoints.length];
 		
-		this.shelterPoints = shelterPoints;
+		for (int i = 0; i < shelterPoints.length; i++) {
+			this.shelterPoints[i] = shelterPoints[i];
+		}
+		
 		pointCount = shelterPoints.length;
 		for (ShelterPoint point : shelterPoints) {
 			this.resource.addProperty(NProperty.hasShelterPoint,
 					point.getResource());
 			this.resource.getModel().add(point.getResource().getModel());
-			
+
 			if (point.getSeatingCapacity() < 0)
 				this.invalidPoinst.add(point);
 		}
@@ -55,11 +62,11 @@ public class NPrefecture {
 	public int getShelterPointCount() {
 		return pointCount;
 	}
-	
+
 	public int getInvalidPointCount() {
 		return this.invalidPoinst.size();
 	}
-	
+
 	private Model model = DataUtil.createModel();
 
 	public NPrefecture(String name, int code) {

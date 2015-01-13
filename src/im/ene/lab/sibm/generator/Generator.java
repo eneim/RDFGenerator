@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Random;
 import java.util.UUID;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import im.ene.lab.sibm.models.NPerson;
@@ -40,6 +41,29 @@ public class Generator {
 
 		System.out.println(t1 + " | " + t2 + " | " + t3);
 
+	}
+
+	private static NPerson genPerson(int age, boolean isDead) {
+		NPerson p = genPerson(age);
+		if (isDead)
+			p.setProfile(null);
+
+		return p;
+	}
+
+	private static NPerson genPersion(int age, String fName, boolean isDead) {
+		NPerson p = genPerson(age, fName);
+		if (isDead)
+			p.setProfile(null);
+
+		return p;
+	}
+
+	private static NPerson genPerson(int age, String fName) {
+		NPerson p = genPerson(age);
+		p.getProfile().setSurname(genLastName(fName));
+
+		return p;
 	}
 
 	private static NPerson genPerson(int age) {
@@ -178,5 +202,129 @@ public class Generator {
 	private static String fixName(String original) {
 		return original.length() == 0 ? original : original.substring(0, 1)
 				.toUpperCase() + original.substring(1);
+	}
+
+	public static NPerson[] genFamily(String fName, int depth) {
+		// depth = 0: single;
+		// depth = 1: parent - children
+		// depth = 2: grandparent - parent - children
+		// max depth = 2;
+		
+		if (depth > 2) depth = 2;
+		if (depth < 0) depth = 0;
+		
+		NPerson grandFather = new NPerson();
+		NPerson grandMother = new NPerson();
+
+		NPerson father = new NPerson();
+		NPerson mother = new NPerson();
+
+		NPerson[] children = null;
+
+		int childAverageAge = genRandomInt(6, 25);
+
+		int fatherAge, motherAge, grandFatherAge, grandMotherAge;
+
+		int[] childAge = null;
+
+		if (depth == 0) {
+			return new NPerson[] { genPerson() };
+		} else {
+			int childCount = genRandomInt(0, 3);
+			if (childCount == 0) {
+				// start from father age
+				fatherAge = genRandomInt(20, 60);
+				motherAge = fatherAge + genRandomInt(-4, 4);
+
+				grandFatherAge = fatherAge + genRandomInt(20, 30);
+				grandMotherAge = grandFatherAge + genRandomInt(-4, 4);
+			} else {
+				fatherAge = childAverageAge + genRandomInt(20, 30);
+				motherAge = childAverageAge + genRandomInt(-4, 4);
+
+				grandFatherAge = fatherAge + genRandomInt(20, 30);
+				grandMotherAge = grandFatherAge + genRandomInt(-4, 4);
+
+				childAge = new int[childCount];
+				for (int i = 0; i < childAge.length; i++)
+					childAge[i] = childAverageAge + genRandomInt(-3, 3);
+			}
+
+			boolean hasChild = false;
+			// generate
+			if (childAge != null && childAge.length > 0) {
+				hasChild = true;
+				children = new NPerson[childAge.length];
+				for (int i = 0; i < childAge.length; i++) {
+					children[i] = genPerson(childAge[i], fName);
+				}
+			} else {
+				hasChild = false;
+				children = new NPerson[0];
+			}
+
+			father = genPerson(fatherAge, fName);
+			father.getProfile().setGender(GENDER[0]);
+
+			mother = genPerson(motherAge, fName);
+			mother.getProfile().setGender(GENDER[1]);
+
+			father.setSpouse(mother);
+			mother.setSpouse(father);
+
+			if (hasChild) {
+				father.setChildren(children);
+				mother.setChildren(children);
+			}
+
+			NPerson[] parent = new NPerson[] { father, mother };
+			NPerson[] familyAtDepth1 = ArrayUtils.addAll(parent, children);
+
+			if (depth == 1) {
+				// return is ok
+				return familyAtDepth1;
+			} else {
+				// continue
+				grandFather = genPersion(grandFatherAge, fName,
+						(Math.random() > 0.5));
+				if (grandFather.getProfile() != null)
+					grandFather.getProfile().setGender(GENDER[0]);
+
+				grandMother = genPersion(grandMotherAge, fName,
+						(Math.random() > 0.5));
+				if (grandMother.getProfile() != null)
+					grandMother.getProfile().setGender(GENDER[1]);
+
+				grandFather.setSpouse(grandMother);
+				grandMother.setSpouse(grandFather);
+
+				// FIXME
+				grandFather.setChildren(parent);
+				grandMother.setChildren(parent);
+
+				father.setFather(grandFather);
+				father.setMother(grandMother);
+
+				mother.setFather(grandFather);
+				mother.setMother(grandMother);
+
+				boolean hasGrandFather = grandFather.getProfile() != null;
+				boolean hasGrandMother = grandMother.getProfile() != null;
+
+				NPerson[] familyAtDepth2 = familyAtDepth1;
+
+				if (hasGrandFather) {
+					familyAtDepth2 = ArrayUtils
+							.add(familyAtDepth2, grandFather);
+				}
+
+				if (hasGrandMother) {
+					familyAtDepth2 = ArrayUtils
+							.add(familyAtDepth2, grandMother);
+				}
+
+				return familyAtDepth2;
+			}
+		}
 	}
 }

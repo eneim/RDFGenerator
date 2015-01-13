@@ -12,29 +12,35 @@ import im.ene.lab.sibm.util.dataofjapan.Region;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.tdb.TDBFactory;
 
-public class SIBM {
+public class SIBMv2 {
 
 	public static final String dir = "sibm";
 
 	public static void main(String[] args) throws IOException {
-		int shelterCount = 100;
+		int shelterCount = 10;
 		if (args.length <= 1) {
 			System.out
-					.println("Invalid shelter count. \nUsage: java -jar SIBM.jar -count 100");
+					.println("Invalid shelter count. \nUsage: java -jar SIBMv2.jar -count 100");
 			return;
 		} else {
 			if (!args[0].startsWith("-count")) {
 				System.out
-						.println("Invalid shelter count. \nUsage: java -jar SIBM.jar -count 100");
+						.println("Invalid shelter count. \nUsage: java -jar SIBMv2.jar -count 100");
 				return;
 			} else {
 				shelterCount = Integer.valueOf(args[1]);
@@ -152,6 +158,13 @@ public class SIBM {
 
 			readme.writeLine("Input shelter count: " + this.shelterPointCount);
 
+			File data_ = new File(dir + "/data" + System.currentTimeMillis());
+			if (!data_.exists())
+				data_.mkdirs();
+
+			Dataset dataset = TDBFactory.createDataset(data_.getPath());
+			Model master = dataset.getDefaultModel();
+
 			while (regionCount < MAX_REGION) {
 				if (regionIndexMap[regionCount] == 0) {
 					break;
@@ -208,30 +221,40 @@ public class SIBM {
 
 					for (int i = 0; i < prefDataset.getShelterPointCount(); i++) {
 						ShelterPoint point = prefDataset.getShelterPoints()[i];
-						File file = new File(dir + File.separatorChar
-								+ pref.nameEn + "_"
-								+ point.getAdministrativeAreaCode() + "_" + i
-								+ ".txt");
-						if (!file.exists()) {
-							file.createNewFile();
-						}
+						dataset.begin(ReadWrite.WRITE);
+						master.add(point.getResource().getModel());
+						// master.add(
+						// pref.nameEn + "_"
+						// + point.getAdministrativeAreaCode()
+						// + "_" + i, point.getResource()
+						// .getModel());
+						dataset.commit();
 
-						FileOutputStream outFile = new FileOutputStream(file);
-						point.getResource().getModel().write(outFile, "Turtle");
-						outFile.close();
 					}
 
 					if (counter <= 0) {
-						readme.writeLine("Output shelter count: "
-								+ shelterCount);
-						readme.writeLine("Output people count: " + personCount);
+						// readme.writeLine("Output shelter count: "
+						// + shelterCount);
+						// readme.writeLine("Output people count: " +
+						// personCount);
 
-						System.out.println("Output shelter count: "
-								+ shelterCount);
+						// System.out.println("Output shelter count: "
+						// + shelterCount);
 						System.out.println("Output people count: "
 								+ personCount);
-
+						System.out.println("data size: " + folderSize(data_));
 						readme.end();
+
+						dataset.begin(ReadWrite.READ);
+						Iterator<Triple> triples = master.getGraph().find(
+								Node.ANY, Node.ANY, Node.ANY);
+						int tripleCounter = 0;
+						while (triples.hasNext()) {
+							triples.next();
+							tripleCounter ++;
+						}
+						System.out.println("Triples: " + tripleCounter);
+						dataset.close();
 						break;
 					}
 				}
@@ -244,5 +267,16 @@ public class SIBM {
 
 			}
 		}
+	}
+
+	public static long folderSize(File directory) {
+		long length = 0;
+		for (File file : directory.listFiles()) {
+			if (file.isFile())
+				length += file.length();
+			else
+				length += folderSize(file);
+		}
+		return length;
 	}
 }

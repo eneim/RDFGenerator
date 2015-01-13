@@ -138,7 +138,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		if (points.length > max) {
 			points = Arrays.copyOf(points, max);
 		}
-
+		
 		NPrefecture pref = new NPrefecture(DataUtil.PREFS.get(code), code);
 		pref.setShelterPoints(points);
 		// pref.setShelterPoint(points[0]);

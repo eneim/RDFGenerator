@@ -37,7 +37,7 @@ public class NFileUtils {
 
 	public void writeLine(String line) throws IOException {
 		this.fileWriter.write(line);
-		this.fileWriter.write("\n");
+		this.fileWriter.write("\r\n");
 	}
 
 	public void end() throws IOException {
