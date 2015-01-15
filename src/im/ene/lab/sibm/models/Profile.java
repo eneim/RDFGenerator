@@ -1,5 +1,7 @@
 package im.ene.lab.sibm.models;
 
+import im.ene.lab.sibm.util.DataUtil;
+
 import javax.annotation.Generated;
 
 @Generated("org.jsonschema2pojo")
@@ -212,6 +214,10 @@ public class Profile {
 	 */
 	public void setOccupation(String occupation) {
 		this.occupation = occupation;
-
+	}
+	
+	@Override
+	public String toString() {
+		return DataUtil.GSON.toJson(this);
 	}
 }

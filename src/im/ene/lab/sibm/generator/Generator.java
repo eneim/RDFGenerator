@@ -19,7 +19,7 @@ public class Generator {
 
 	private static int DEFAULT_MIN_AGE = 3;
 
-	private static int DEFAULT_MAX_AGE = 90;
+	private static int DEFAULT_MAX_AGE = 97;
 
 	private static String[] GENDER = { "Male", "Female" };
 
@@ -74,7 +74,8 @@ public class Generator {
 		profile.setSurname(genLastName());
 		profile.setEmail(genEmail(profile.getFirstName(), profile.getSurname()));
 		profile.setGender(genGender(false));
-		profile.setPhone(genPhone("+81"));
+		if (age >= 12)
+			profile.setPhone(genPhone("+81"));
 
 		UUID id = UUID.randomUUID();
 		profile.setUserID(id.toString());
@@ -209,10 +210,12 @@ public class Generator {
 		// depth = 1: parent - children
 		// depth = 2: grandparent - parent - children
 		// max depth = 2;
-		
-		if (depth > 2) depth = 2;
-		if (depth < 0) depth = 0;
-		
+
+		if (depth > 2)
+			depth = 2;
+		if (depth < 0)
+			depth = 0;
+
 		NPerson grandFather = new NPerson();
 		NPerson grandMother = new NPerson();
 
@@ -239,15 +242,22 @@ public class Generator {
 				grandFatherAge = fatherAge + genRandomInt(20, 30);
 				grandMotherAge = grandFatherAge + genRandomInt(-4, 4);
 			} else {
-				fatherAge = childAverageAge + genRandomInt(20, 30);
-				motherAge = childAverageAge + genRandomInt(-4, 4);
+
+				childAge = new int[childCount];
+				for (int i = 0; i < childAge.length; i++) {
+					if (i <= 0)
+						childAge[i] = childAverageAge + genRandomInt(-3, 2);
+					else
+						childAge[i] = childAge[i - 1] + genRandomInt(1, 3);
+				}
+
+				fatherAge = childAge[childAge.length - 1]
+						+ genRandomInt(20, 30);
+				motherAge = fatherAge + genRandomInt(-4, 4);
 
 				grandFatherAge = fatherAge + genRandomInt(20, 30);
 				grandMotherAge = grandFatherAge + genRandomInt(-4, 4);
 
-				childAge = new int[childCount];
-				for (int i = 0; i < childAge.length; i++)
-					childAge[i] = childAverageAge + genRandomInt(-3, 3);
 			}
 
 			boolean hasChild = false;
@@ -285,13 +295,20 @@ public class Generator {
 				return familyAtDepth1;
 			} else {
 				// continue
-				grandFather = genPersion(grandFatherAge, fName,
-						(Math.random() > 0.5));
+				grandFather = genPersion(
+						grandFatherAge,
+						fName,
+						(Math.random() > Math.abs((1 - (float) grandFatherAge
+								/ DEFAULT_MAX_AGE))));
 				if (grandFather.getProfile() != null)
 					grandFather.getProfile().setGender(GENDER[0]);
 
-				grandMother = genPersion(grandMotherAge, fName,
-						(Math.random() > 0.5));
+				// rate of dead: (age / DEFAULT_MAX_AGE)
+				grandMother = genPersion(
+						grandMotherAge,
+						fName,
+						(Math.random() > Math.abs((1 - (float) grandMotherAge
+								/ DEFAULT_MAX_AGE))));
 				if (grandMother.getProfile() != null)
 					grandMother.getProfile().setGender(GENDER[1]);
 

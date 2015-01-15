@@ -1,28 +1,18 @@
 package im.ene.lab.sibm;
 
+import im.ene.lab.sibm.generator.Generator;
+import im.ene.lab.sibm.models.NPerson;
+
 
 public class Test {
 
 	public static void main(String[] args) throws Exception {
 
-		int max = 10000;
-		int i = 1;
-
-		if (args[0] != null)
-			max = Integer.valueOf(args[0]);
+		NPerson[] family = Generator.genFamily("Fname", 2);
 		
-		NFileUtils bench = new NFileUtils("bench.txt");
-		
-		// warmup
-		SIBM.benchmark(1);
-		
-		bench.start(true);
-		while (i < max) {
-			bench.writeLine(SIBM.benchmark(i));
-			i *= 2;
+		for (NPerson p : family) {
+			System.out.println(p.toString());
 		}
-		
-		bench.end();
 	}
 
 }

@@ -133,6 +133,6 @@ public class NPerson {
 
 	@Override
 	public String toString() {
-		return super.toString();
+		return DataUtil.GSON.toJson(this.getProfile());
 	}
 }
