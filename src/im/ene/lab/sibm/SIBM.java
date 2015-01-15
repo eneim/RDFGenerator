@@ -26,7 +26,10 @@ public class SIBM {
 	public static final String dir = "sibm";
 
 	public static void main(String[] args) throws IOException {
-		int shelterCount = 100;
+		int shelterCount = 2;
+
+		// benchmark(shelterCount);
+
 		if (args.length <= 1) {
 			System.out
 					.println("Invalid shelter count. \nUsage: java -jar SIBM.jar -count 100");
@@ -42,6 +45,7 @@ public class SIBM {
 		}
 
 		System.out.println(benchmark(shelterCount));
+
 	}
 
 	public static String benchmark(int count) throws IOException {
@@ -57,6 +61,10 @@ public class SIBM {
 		// strategy builder
 		private int shelterPointCount;
 
+		private boolean isGenerateByShelterCount = true;	// true by default;
+		private boolean isGenerateByPrefCode = false;
+		private boolean isGenerateByRegionCode = false;
+		
 		private int[] regionCodes;
 
 		private int personCount;
@@ -162,7 +170,7 @@ public class SIBM {
 					NPrefecture prefDataset = shelterLoader.getPrefectureData(
 							pref.id, counter);
 
-					int max = prefDataset.getShelterPointCount() * 500;
+					int max = prefDataset.getShelterPointCount() * 250;
 					max = Generator.genRandomInt(max / 2, max);
 
 					shelterCount += prefDataset.getShelterPointCount();
@@ -172,27 +180,34 @@ public class SIBM {
 						max--;
 						//
 						try {
-							NPerson p = Generator.genPerson();
-							if (p != null)
-								synchronized (p) {
-									ShelterPoint randomPoint = prefDataset
-											.getShelterPoints()[Generator
-											.genRandomInt(0, prefDataset
-													.getShelterPointCount() - 1)];
+							// NPerson p = Generator.genPerson();
+							NPerson[] family = Generator.genFamily(
+									Generator.genLastName(),
+									Generator.genRandomInt(0, 2));
+							for (NPerson p : family)
+								if (p != null)
+									synchronized (p) {
+										ShelterPoint randomPoint = prefDataset
+												.getShelterPoints()[Generator
+												.genRandomInt(
+														0,
+														prefDataset
+																.getShelterPointCount() - 1)];
 
-									Resource res = p.getResource();
-									if (res != null) {
-										res.addProperty(NProperty.stayAt,
-												randomPoint.getResource());
-										randomPoint.getResource().getModel()
-												.add(res.getModel());
+										Resource res = p.getResource();
+										if (res != null) {
+											res.addProperty(NProperty.stayAt,
+													randomPoint.getResource());
+											randomPoint.getResource()
+													.getModel()
+													.add(res.getModel());
+										}
+
+										// prefDataset
+										// .getResource()
+										// .getModel()
+										// .add();
 									}
-
-									// prefDataset
-									// .getResource()
-									// .getModel()
-									// .add();
-								}
 						} catch (Exception er) {
 							er.printStackTrace();
 						}

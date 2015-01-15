@@ -7,7 +7,6 @@ import javax.annotation.Generated;
 @Generated("org.jsonschema2pojo")
 public class Profile {
 
-	private String userID;
 	private String firstName;
 	private String surname;
 	private String gender;
@@ -18,24 +17,6 @@ public class Profile {
 	private String zipCode;
 	private String email;
 	private String occupation;
-
-	/**
-	 * 
-	 * @return The userID
-	 */
-	public String getUserID() {
-		return userID;
-	}
-
-	/**
-	 * 
-	 * @param userID
-	 *            The userID
-	 */
-	public void setUserID(String userID) {
-		this.userID = userID;
-
-	}
 
 	/**
 	 * 

@@ -32,22 +32,20 @@ public class SIBMv2 {
 	public static final String dir = "sibm";
 
 	public static void main(String[] args) throws IOException {
-		int shelterCount = 10;
-		if (args.length <= 1) {
-			System.out
-					.println("Invalid shelter count. \nUsage: java -jar SIBMv2.jar -count 100");
-			return;
-		} else {
-			if (!args[0].startsWith("-count")) {
-				System.out
-						.println("Invalid shelter count. \nUsage: java -jar SIBMv2.jar -count 100");
-				return;
-			} else {
-				shelterCount = Integer.valueOf(args[1]);
-			}
-		}
+		int shelterCount = 2;
 
-		System.out.println(benchmark(shelterCount));
+		benchmark(shelterCount);
+
+		/*
+		 * if (args.length <= 1) { System.out .println(
+		 * "Invalid shelter count. \nUsage: java -jar SIBMv2.jar -count 100");
+		 * return; } else { if (!args[0].startsWith("-count")) { System.out
+		 * .println
+		 * ("Invalid shelter count. \nUsage: java -jar SIBMv2.jar -count 100");
+		 * return; } else { shelterCount = Integer.valueOf(args[1]); } }
+		 * 
+		 * System.out.println(benchmark(shelterCount));
+		 */
 	}
 
 	public static String benchmark(int count) throws IOException {
@@ -62,8 +60,6 @@ public class SIBMv2 {
 	public static class Builder {
 		// strategy builder
 		private int shelterPointCount;
-
-		private int[] regionCodes;
 
 		private int personCount;
 
@@ -175,7 +171,7 @@ public class SIBMv2 {
 					NPrefecture prefDataset = shelterLoader.getPrefectureData(
 							pref.id, counter);
 
-					int max = prefDataset.getShelterPointCount() * 500;
+					int max = prefDataset.getShelterPointCount() * 250;
 					max = Generator.genRandomInt(max / 2, max);
 
 					shelterCount += prefDataset.getShelterPointCount();
@@ -185,27 +181,34 @@ public class SIBMv2 {
 						max--;
 						//
 						try {
-							NPerson p = Generator.genPerson();
-							if (p != null)
-								synchronized (p) {
-									ShelterPoint randomPoint = prefDataset
-											.getShelterPoints()[Generator
-											.genRandomInt(0, prefDataset
-													.getShelterPointCount() - 1)];
+							// NPerson p = Generator.genPerson();
+							NPerson[] family = Generator.genFamily(
+									Generator.genLastName(),
+									Generator.genRandomInt(0, 2));
+							for (NPerson p : family)
+								if (p != null)
+									synchronized (p) {
+										ShelterPoint randomPoint = prefDataset
+												.getShelterPoints()[Generator
+												.genRandomInt(
+														0,
+														prefDataset
+																.getShelterPointCount() - 1)];
 
-									Resource res = p.getResource();
-									if (res != null) {
-										res.addProperty(NProperty.stayAt,
-												randomPoint.getResource());
-										randomPoint.getResource().getModel()
-												.add(res.getModel());
+										Resource res = p.getResource();
+										if (res != null) {
+											res.addProperty(NProperty.stayAt,
+													randomPoint.getResource());
+											randomPoint.getResource()
+													.getModel()
+													.add(res.getModel());
+										}
+
+										// prefDataset
+										// .getResource()
+										// .getModel()
+										// .add();
 									}
-
-									// prefDataset
-									// .getResource()
-									// .getModel()
-									// .add();
-								}
 						} catch (Exception er) {
 							er.printStackTrace();
 						}
@@ -251,7 +254,7 @@ public class SIBMv2 {
 						int tripleCounter = 0;
 						while (triples.hasNext()) {
 							triples.next();
-							tripleCounter ++;
+							tripleCounter++;
 						}
 						System.out.println("Triples: " + tripleCounter);
 						dataset.close();

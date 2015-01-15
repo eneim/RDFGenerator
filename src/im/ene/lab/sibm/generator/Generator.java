@@ -78,9 +78,9 @@ public class Generator {
 			profile.setPhone(genPhone("+81"));
 
 		UUID id = UUID.randomUUID();
-		profile.setUserID(id.toString());
+		// profile.setUserID(id.toString());
 
-		NPerson person = new NPerson();
+		NPerson person = new NPerson(id.toString());
 		person.setProfile(profile);
 		person.setType(genType(age));
 
@@ -181,7 +181,7 @@ public class Generator {
 		return seed + "xx-xxxx-xxxx";
 	}
 
-	private static String genLastName() {
+	public static String genLastName() {
 		return fixName(genLastName(null));
 	}
 
@@ -216,11 +216,11 @@ public class Generator {
 		if (depth < 0)
 			depth = 0;
 
-		NPerson grandFather = new NPerson();
-		NPerson grandMother = new NPerson();
+		NPerson grandFather;
+		NPerson grandMother;
 
-		NPerson father = new NPerson();
-		NPerson mother = new NPerson();
+		NPerson father;
+		NPerson mother;
 
 		NPerson[] children = null;
 
@@ -295,6 +295,8 @@ public class Generator {
 				return familyAtDepth1;
 			} else {
 				// continue
+				// rate of dead: age / DEFAULT_MAX_AGE;
+				
 				grandFather = genPersion(
 						grandFatherAge,
 						fName,
@@ -303,7 +305,6 @@ public class Generator {
 				if (grandFather.getProfile() != null)
 					grandFather.getProfile().setGender(GENDER[0]);
 
-				// rate of dead: (age / DEFAULT_MAX_AGE)
 				grandMother = genPersion(
 						grandMotherAge,
 						fName,

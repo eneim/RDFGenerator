@@ -49,7 +49,7 @@ public class DataUtil {
 
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(new File("data"
+			br = new BufferedReader(new FileReader(new File("sibm"
 					+ File.separatorChar + "pref.csv")));
 			String line;
 			while ((line = br.readLine()) != null) {

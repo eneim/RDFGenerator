@@ -16,6 +16,21 @@ public class NPerson {
 
 	protected Resource resource;
 
+	public NPerson(String id) {
+		this.ID = id;
+		this.resource = model.createResource(BASE_PERSON + id);
+	}
+
+	private String ID;
+
+	public String getID() {
+		return ID;
+	}
+
+	public void setID(String iD) {
+		ID = iD;
+	}
+
 	private NUserType type;
 
 	public NUserType getType() {
@@ -24,6 +39,8 @@ public class NPerson {
 
 	public void setType(NUserType type) {
 		this.type = type;
+		this.resource.addProperty(RDF.type, getType().getResource());
+		this.resource.getModel().add(getType().getResource().getModel());
 	}
 
 	private Profile profile;
@@ -36,6 +53,11 @@ public class NPerson {
 
 	public void setFather(NPerson father) {
 		this.father = father;
+		if (father != null) {
+			Resource rf = father.getResource();
+			if (rf != null)
+				this.resource.addProperty(NProperty.hasFather, rf);
+		}
 	}
 
 	public NPerson getMother() {
@@ -44,6 +66,11 @@ public class NPerson {
 
 	public void setMother(NPerson mother) {
 		this.mother = mother;
+		if (mother != null) {
+			Resource rf = mother.getResource();
+			if (rf != null)
+				this.resource.addProperty(NProperty.hasMother, rf);
+		}
 	}
 
 	public NPerson getSpouse() {
@@ -52,6 +79,11 @@ public class NPerson {
 
 	public void setSpouse(NPerson spouse) {
 		this.spouse = spouse;
+		if (spouse != null) {
+			Resource rf = spouse.getResource();
+			if (rf != null)
+				this.resource.addProperty(NProperty.hasSpouse, rf);
+		}
 	}
 
 	public NPerson[] getChildren() {
@@ -60,6 +92,15 @@ public class NPerson {
 
 	public void setChildren(NPerson[] children) {
 		this.children = children;
+		if (children != null && children.length > 0) {
+			Resource rf = null;
+			for (NPerson child : children)
+				if (child.getResource() != null) {
+					rf = child.getResource();
+					if (rf != null)
+						this.resource.addProperty(NProperty.hasChild, rf);
+				}
+		}
 	}
 
 	private NPerson[] children;
@@ -79,60 +120,46 @@ public class NPerson {
 	 */
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+
+		if (profile == null)
+			return;
+		else {
+			Resource res = ModelFactory.createDefaultModel().createResource();
+			res.addLiteral(NProperty.firstName, profile.getFirstName())
+					.addLiteral(NProperty.surname, profile.getSurname())
+					.addLiteral(NProperty.gender, profile.getGender())
+					.addLiteral(NProperty.birthday, profile.getBirthday())
+					.addLiteral(NProperty.age, profile.getAge())
+					// .addLiteral(NProperty.address, profile.getAddress())
+					// .addLiteral(NProperty.zipCode, profile.getZipCode())
+					.addLiteral(NProperty.email, profile.getEmail());
+
+			if (profile.getPhone() != null)
+				res.addLiteral(NProperty.phone, profile.getPhone());
+
+			this.resource.addProperty(NProperty.profile, res);
+
+			this.resource.getModel().add(res.getModel());
+		}
 	}
 
 	private Model model = DataUtil.createModel();
 
 	public Resource getResource() {
-		if (profile == null)
-			return null;
 
-		this.resource = model.createResource(BASE_PERSON + profile.getUserID());
-
-		Resource res = ModelFactory.createDefaultModel().createResource();
-		res.addLiteral(NProperty.userID, profile.getUserID())
-				.addLiteral(NProperty.firstName, profile.getFirstName())
-				.addLiteral(NProperty.surname, profile.getSurname())
-				.addLiteral(NProperty.gender, profile.getGender())
-				.addLiteral(NProperty.birthday, profile.getBirthday())
-				.addLiteral(NProperty.age, profile.getAge())
-				.addLiteral(NProperty.phone, profile.getPhone())
-				// .addLiteral(NProperty.address, profile.getAddress())
-				// .addLiteral(NProperty.zipCode, profile.getZipCode())
-				.addLiteral(NProperty.email, profile.getEmail())
-		// .addLiteral(NProperty.occupation, profile.getOccupation())
-		;
-
-		this.resource.addProperty(NProperty.profile, res).addProperty(RDF.type,
-				getType().getResource());
-
-		if (this.getFather() != null && this.getFather().getResource() != null)
-			this.resource.addProperty(NProperty.hasFather, this.getFather()
-					.getResource());
-
-		if (this.getMother() != null && this.getMother().getResource() != null)
-			this.resource.addProperty(NProperty.hasMother, this.getMother()
-					.getResource());
-
-		if (this.getSpouse() != null && this.getSpouse().getResource() != null)
-			this.resource.addProperty(NProperty.hasSpouse, this.getSpouse()
-					.getResource());
-
-		if (this.getChildren() != null && this.getChildren().length > 0) {
-			for (NPerson child : this.getChildren())
-				if (child.getResource() != null)
-					this.resource.addProperty(NProperty.hasChild,
-							child.getResource());
-		}
-
-		this.resource.getModel().add(res.getModel())
-				.add(getType().getResource().getModel());
+		// call to setup resource
+		// this.getFather();
+		// this.getMother();
+		// this.getSpouse();
+		// this.getChildren();
 
 		return this.resource;
 	}
 
 	@Override
 	public String toString() {
+		if (this.getProfile() == null)
+			return "profile is null";
 		return DataUtil.GSON.toJson(this.getProfile());
 	}
 }
