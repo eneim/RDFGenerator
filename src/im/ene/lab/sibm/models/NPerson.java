@@ -1,6 +1,6 @@
 package im.ene.lab.sibm.models;
 
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import javax.annotation.Generated;
 
@@ -143,7 +143,7 @@ public class NPerson {
 		}
 	}
 
-	private Model model = DataUtil.createModel();
+	private Model model = NDataUtils.createModel();
 
 	public Resource getResource() {
 
@@ -160,6 +160,6 @@ public class NPerson {
 	public String toString() {
 		if (this.getProfile() == null)
 			return "profile is null";
-		return DataUtil.GSON.toJson(this.getProfile());
+		return NDataUtils.GSON.toJson(this.getProfile());
 	}
 }

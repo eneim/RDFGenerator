@@ -2,7 +2,7 @@ package im.ene.lab.sibm.util.dataofjapan;
 
 import im.ene.lab.sibm.map.ksj.shelter.ShelterDataLoaderImpl;
 import im.ene.lab.sibm.models.NPrefecture;
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -77,7 +77,7 @@ public class DOJParser {
 		try {
 			fileOut = new FileWriter(new File(DIR + File.separatorChar
 					+ "regions.json"));
-			fileOut.write(DataUtil.GSON.toJson(regions));
+			fileOut.write(NDataUtils.GSON.toJson(regions));
 
 			fileOut.flush();
 		} catch (IOException e) {

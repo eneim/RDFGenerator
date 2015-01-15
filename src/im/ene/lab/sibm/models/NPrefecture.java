@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -27,6 +27,8 @@ public class NPrefecture {
 
 	private int pointCount = 0;
 
+	private int averageCapacity = 0;
+
 	public ShelterPoint[] getShelterPoints() {
 		return shelterPoints;
 	}
@@ -43,12 +45,19 @@ public class NPrefecture {
 			return;
 
 		this.shelterPoints = new ShelterPoint[shelterPoints.length];
-		
+
 		for (int i = 0; i < shelterPoints.length; i++) {
 			this.shelterPoints[i] = shelterPoints[i];
+
+			int cap = shelterPoints[i].getSeatingCapacity();
+			if (cap < 0)
+				cap = 0;
+			averageCapacity += cap;
 		}
-		
+
 		pointCount = shelterPoints.length;
+		averageCapacity = averageCapacity / pointCount;
+		
 		for (ShelterPoint point : shelterPoints) {
 			this.resource.addProperty(NProperty.hasShelterPoint,
 					point.getResource());
@@ -63,11 +72,15 @@ public class NPrefecture {
 		return pointCount;
 	}
 
+	public int getAverageCapacity() {
+		return averageCapacity;
+	}
+	
 	public int getInvalidPointCount() {
 		return this.invalidPoinst.size();
 	}
 
-	private Model model = DataUtil.createModel();
+	private Model model = NDataUtils.createModel();
 
 	public NPrefecture(String name, int code) {
 		this.name = name;

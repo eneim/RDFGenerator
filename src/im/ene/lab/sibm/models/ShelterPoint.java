@@ -1,7 +1,7 @@
 package im.ene.lab.sibm.models;
 
 import im.ene.lab.sibm.map.ksj.Data;
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -11,7 +11,7 @@ public class ShelterPoint implements Data {
 
 	public static final String BASE_SHELTER = "http://lab.ene.im/SIBM/thing/shelterpoint/";
 
-	private Model model = DataUtil.createModel();
+	private Model model = NDataUtils.createModel();
 
 	private Resource resource;
 
@@ -166,6 +166,6 @@ public class ShelterPoint implements Data {
 
 	@Override
 	public String toString() {
-		return DataUtil.GSON.toJson(this);
+		return NDataUtils.GSON.toJson(this);
 	}
 }

@@ -66,7 +66,7 @@ public class RandomProfileUtil {
 				responseString = "[" + responseString;
 			}
 
-			NPerson[] result = DataUtil.GSON.fromJson(responseString,
+			NPerson[] result = NDataUtils.GSON.fromJson(responseString,
 					NPerson[].class);
 			if (result.length > 0)
 				return result[0];

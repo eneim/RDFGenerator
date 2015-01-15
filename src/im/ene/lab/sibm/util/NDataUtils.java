@@ -29,7 +29,7 @@ import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.vocabulary.XSD;
 
-public class DataUtil {
+public class NDataUtils {
 
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting()
 			.create();

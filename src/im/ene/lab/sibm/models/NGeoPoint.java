@@ -2,7 +2,7 @@ package im.ene.lab.sibm.models;
 
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.map.ksj.NPoint;
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -12,7 +12,7 @@ public class NGeoPoint implements Data {
 
 	private Resource resource;
 
-	private Model model = DataUtil.createModel();
+	private Model model = NDataUtils.createModel();
 	
 	public NGeoPoint() {
 		this.resource = model.createResource();

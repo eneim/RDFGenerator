@@ -1,6 +1,6 @@
 package im.ene.lab.sibm.models;
 
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import javax.annotation.Generated;
 
@@ -199,6 +199,6 @@ public class Profile {
 	
 	@Override
 	public String toString() {
-		return DataUtil.GSON.toJson(this);
+		return NDataUtils.GSON.toJson(this);
 	}
 }

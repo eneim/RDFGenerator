@@ -3,7 +3,7 @@ package im.ene.lab.sibm.map.ksj.shelter;
 import im.ene.lab.sibm.map.ksj.handler.ShelterDataHandler;
 import im.ene.lab.sibm.models.NPrefecture;
 import im.ene.lab.sibm.models.ShelterPoint;
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 import im.ene.lab.sibm.util.GeneralFileFilter;
 
 import java.io.File;
@@ -119,18 +119,18 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 	}
 
 	public NPrefecture getPrefectureData(int code) {
-		if (!DataUtil.PREFS.containsKey(code))
+		if (!NDataUtils.PREFS.containsKey(code))
 			return null;
 
 		ShelterPoint[] points = readShelterGML(code);
-		NPrefecture pref = new NPrefecture(DataUtil.PREFS.get(code), code);
+		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
 		pref.setShelterPoints(points);
 		// pref.setShelterPoint(points[0]);
 		return pref;
 	}
 
 	public NPrefecture getPrefectureData(int code, int max) {
-		if (!DataUtil.PREFS.containsKey(code))
+		if (!NDataUtils.PREFS.containsKey(code))
 			return null;
 
 		ShelterPoint[] points = readShelterGML(code);
@@ -139,7 +139,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 			points = Arrays.copyOf(points, max);
 		}
 		
-		NPrefecture pref = new NPrefecture(DataUtil.PREFS.get(code), code);
+		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
 		pref.setShelterPoints(points);
 		// pref.setShelterPoint(points[0]);
 		return pref;
@@ -208,7 +208,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		};
 
 		try {
-			if (!DataUtil.hasExtracted(dir, filter)) {
+			if (!NDataUtils.hasExtracted(dir, filter)) {
 				/*
 				 * 圧縮ファイルが残っている or ディレクトリが存在しない or ディレクトリ内のファイルが存在しない or
 				 * ディレクトリの内容が正確でない（チェックできてない）
@@ -217,7 +217,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 						+ String.format(KSJ_URL_FORMAT_LIST[type], code));
 				long t0 = System.currentTimeMillis();
 				System.out.printf("DL: %s ...\n", url.getPath());
-				if (!DataUtil.download(url, zip))
+				if (!NDataUtils.download(url, zip))
 					return null;
 				System.out.printf("DL: %s / %dms\n", url.getPath(),
 						(System.currentTimeMillis() - t0));
@@ -226,7 +226,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 			if (zip.exists()) {
 				// ファイルの展開
 				long t0 = System.currentTimeMillis();
-				List<File> extracted = DataUtil.unzip(zip, dir, filter);
+				List<File> extracted = NDataUtils.unzip(zip, dir, filter);
 				System.out.printf("unzip: %s / %dms\n", zip.getName(),
 						(System.currentTimeMillis() - t0));
 				for (File file : extracted) {
@@ -254,7 +254,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 			File[] zipFiles = new File[listFiles.length];
 			for (int i = 0; i < listFiles.length; i++) {
 				File file = listFiles[i];
-				zipFiles[i] = DataUtil.gzip(file);
+				zipFiles[i] = NDataUtils.gzip(file);
 			}
 			ret = zipFiles;
 		} catch (MalformedURLException e) {

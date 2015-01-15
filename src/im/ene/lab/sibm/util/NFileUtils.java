@@ -1,4 +1,4 @@
-package im.ene.lab.sibm;
+package im.ene.lab.sibm.util;
 
 import java.io.File;
 import java.io.FileWriter;

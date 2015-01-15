@@ -1,7 +1,7 @@
 package im.ene.lab.sibm.models;
 
 import im.ene.lab.sibm.map.ksj.Data;
-import im.ene.lab.sibm.util.DataUtil;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -18,7 +18,7 @@ public class HazardClassification implements Data {
 	public boolean other;
 	public boolean notSpecified;
 
-	private Model model = DataUtil.createModel();
+	private Model model = NDataUtils.createModel();
 	private Resource resource;
 
 	private String name;
