@@ -27,7 +27,7 @@ public class Generator {
 
 		int t1 = 0, t2 = 0, t3 = 0;
 		for (int i = 0; i < 5000; i++) {
-			NPerson p = genPerson(genRandomInt(30, 60));
+			NPerson p = genPerson(genRandomInt(5, 95));
 
 			if (NUserType.EVACUEE.equals(p.getType())) {
 				t1++;
@@ -39,7 +39,7 @@ public class Generator {
 
 		}
 
-		System.out.println(t1 + " | " + t2 + " | " + t3);
+		System.out.println((float) t1 / 5000 + " | " + (float) t2 / 5000 + " | " + (float) t3 / 5000);
 
 	}
 

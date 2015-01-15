@@ -17,8 +17,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import com.google.gson.reflect.TypeToken;
 import com.hp.hpl.jena.graph.Node;
@@ -182,6 +186,8 @@ public class SIBM {
 					break;
 				}
 
+				ShelterPoint[] pages = new ShelterPoint[10];
+				int[] pageIndex;
 				// regionIndexMap[regionCount] > 0
 				for (Prefecture pref : regions.get(regionCount).prefectures) {
 					NPrefecture prefDataset = shelterLoader.getPrefectureData(
@@ -189,74 +195,112 @@ public class SIBM {
 
 					System.out.println("Average capacity: "
 							+ prefDataset.getAverageCapacity());
-					int max = prefDataset.getShelterPointCount() * 250;
-					max = Generator.genRandomInt(max / 2, max);
+					ArrayList<ShelterPoint> pageList = new ArrayList<ShelterPoint>(
+							Arrays.asList(prefDataset.getShelterPoints()));
 
-					shelterCount += prefDataset.getShelterPointCount();
+					Collections
+							.shuffle(pageList, new Random(System.nanoTime()));
 
-					while (max > 0) {
-						max--;
-						try {
-							// NPerson p = Generator.genPerson();
-							NPerson[] family = Generator.genFamily(
-									Generator.genLastName(),
-									Generator.genRandomInt(0, 2));
+					// "paging"
+					while (pageList.size() > 0) {
+						int leng = pageList.size() >= 10 ? 10 : pageList.size();
+						pages = new ShelterPoint[leng];
+						pageIndex = new int[leng];
 
-							personCount += family.length;
-							for (NPerson p : family)
-								if (p != null)
-									synchronized (p) {
-										ShelterPoint randomPoint = prefDataset
-												.getShelterPoints()[Generator
-												.genRandomInt(
-														0,
-														prefDataset
-																.getShelterPointCount() - 1)];
+						// Arrays.fill(pageIndex, -1);
+						for (int i = 0; i < leng; i++) {
+							// int index = Generator.genRandomInt(0,
+							// pageList.size() - 1);
+							pages[i] = pageList.remove(0);
+							pageIndex[i] = pageList.size();
 
-										Resource res = p.getResource();
-										if (res != null) {
-											res.addProperty(NProperty.stayAt,
-													randomPoint.getResource());
-											randomPoint.getResource()
-													.getModel()
-													.add(res.getModel());
+							if (pageList.size() <= 0)
+								break;
+						}
+
+						// if (pageIndex[0] == -1)
+						// break;
+
+						int max = pages.length
+								* prefDataset.getAverageCapacity();
+						max = Generator.genRandomInt(max / 2, max);
+
+						shelterCount += pages.length;
+
+						while (max > 0) {
+							max--;
+							try {
+								// NPerson p = Generator.genPerson();
+								NPerson[] family = Generator.genFamily(
+										Generator.genLastName(),
+										Generator.genRandomInt(0, 2));
+
+								personCount += family.length;
+								for (NPerson p : family)
+									if (p != null)
+										synchronized (p) {
+											int index = Generator.genRandomInt(
+													0, pages.length - 1);
+
+											ShelterPoint randomPoint = pages[index];
+											Resource res = p.getResource();
+											if (res != null) {
+												res.addProperty(
+														NProperty.stayAt,
+														randomPoint
+																.getResource());
+												randomPoint.getResource()
+														.getModel()
+														.add(res.getModel());
+											}
 										}
-									}
-						} catch (Exception er) {
-							er.printStackTrace();
+							} catch (Exception er) {
+								er.printStackTrace();
+							}
+						}
+
+						counter -= pages.length;
+
+						// readme.writeLine(pref.id + " | " + pref.nameEn +
+						// " | "
+						// + prefDataset.getShelterPointCount());
+
+						for (int i = 0; i < pages.length; i++) {
+							ShelterPoint point = pages[i];
+							File file = new File(
+									dir
+											+ File.separatorChar
+											+ "gen"
+											+ File.separatorChar
+											+ pref.nameEn
+											+ "_"
+											+ point.getAdministrativeAreaCode()
+											+ "_"
+											+ (prefDataset
+													.getShelterPointCount() - pageIndex[i])
+											+ ".ttl");
+							if (!file.exists()) {
+								file.createNewFile();
+							}
+
+							FileOutputStream outFile = new FileOutputStream(
+									file);
+							point.getResource().getModel()
+									.write(outFile, "Turtle");
+							outFile.close();
+
+							Iterator<Triple> triples = point.getResource()
+									.getModel().getGraph()
+									.find(Node.ANY, Node.ANY, Node.ANY);
+							while (triples.hasNext()) {
+								triples.next();
+								tripleCount++;
+							}
 						}
 					}
-
-					counter -= prefDataset.getShelterPointCount();
 
 					System.out.println(pref.id + " | " + pref.nameEn + " | "
 							+ prefDataset.getShelterPointCount());
-
-					// readme.writeLine(pref.id + " | " + pref.nameEn + " | "
-					// + prefDataset.getShelterPointCount());
-
-					for (int i = 0; i < prefDataset.getShelterPointCount(); i++) {
-						ShelterPoint point = prefDataset.getShelterPoints()[i];
-						File file = new File(dir + File.separatorChar + "gen"
-								+ File.separatorChar + pref.nameEn + "_"
-								+ point.getAdministrativeAreaCode() + "_" + i
-								+ ".txt");
-						if (!file.exists()) {
-							file.createNewFile();
-						}
-
-						FileOutputStream outFile = new FileOutputStream(file);
-						point.getResource().getModel().write(outFile, "Turtle");
-						outFile.close();
-
-						Iterator<Triple> triples = point.getResource()
-								.getModel().getGraph()
-								.find(Node.ANY, Node.ANY, Node.ANY);
-						while (triples.hasNext()) {
-							triples.next();
-							tripleCount++;
-						}
-					}
 
 					if (counter <= 0) {
 						readme.writeLine("Output shelter count: "
@@ -281,7 +325,6 @@ public class SIBM {
 					readme.end();
 					break;
 				}
-
 			}
 		}
 	}

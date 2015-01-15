@@ -74,12 +74,16 @@ public class NDataUtils {
 
 	public static Model createModel() {
 		Model model = ModelFactory.createDefaultModel();
-		model.setNsPrefix("sibm", sibm);
-		model.setNsPrefix("geo", sibm_geo);
-		model.setNsPrefix("xsd", XSD.getURI());
+		validate(model);
 		return model;
 	}
 
+	public static void validate(Model model) {
+		model.setNsPrefix("sibm", sibm);
+		model.setNsPrefix("geo", sibm_geo);
+		model.setNsPrefix("xsd", XSD.getURI());
+	}
+	
 	public static File gzip(File file) {
 		File ret = null;
 		try {
