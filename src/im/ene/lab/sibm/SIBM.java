@@ -164,7 +164,7 @@ public class SIBM {
 			// need to generate
 			// scale = -1 equal to 5000 people
 
-			NFileUtils readme = new NFileUtils("readme.txt");
+			NFileUtils readme = new NFileUtils("log.txt");
 			readme.start(true);
 
 			int regionCount = 0;
