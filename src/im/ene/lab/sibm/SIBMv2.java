@@ -190,11 +190,12 @@ public class SIBMv2 {
 								if (p != null)
 									synchronized (p) {
 										ShelterPoint randomPoint = prefDataset
-												.getShelterPoints()[Generator
-												.genRandomInt(
-														0,
-														prefDataset
-																.getShelterPointCount() - 1)];
+												.getShelterPoints()
+												.get(Generator
+														.genRandomInt(
+																0,
+																prefDataset
+																		.getShelterPointCount() - 1));
 
 										Resource res = p.getResource();
 										if (res != null) {
@@ -224,7 +225,7 @@ public class SIBMv2 {
 					// + prefDataset.getShelterPointCount());
 
 					for (int i = 0; i < prefDataset.getShelterPointCount(); i++) {
-						ShelterPoint point = prefDataset.getShelterPoints()[i];
+						ShelterPoint point = prefDataset.getShelterPoints().get(i);
 						dataset.begin(ReadWrite.WRITE);
 						master.add(point.getResource().getModel());
 						// master.add(

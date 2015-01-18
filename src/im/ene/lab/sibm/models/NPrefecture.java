@@ -21,7 +21,7 @@ public class NPrefecture {
 
 	private final String name;
 
-	private ShelterPoint[] shelterPoints;
+	private ArrayList<ShelterPoint> shelterPoints;
 
 	private List<ShelterPoint> invalidPoinst = new ArrayList<ShelterPoint>();
 
@@ -29,12 +29,13 @@ public class NPrefecture {
 
 	private int averageCapacity = 0;
 
-	public ShelterPoint[] getShelterPoints() {
+	public ArrayList<ShelterPoint> getShelterPoints() {
 		return shelterPoints;
 	}
 
 	public void setShelterPoint(ShelterPoint point) {
-		this.shelterPoints = new ShelterPoint[] { point };
+		this.shelterPoints = new ArrayList<ShelterPoint>();
+		this.shelterPoints.add(point);
 		this.resource.addProperty(NProperty.hasShelterPoint,
 				point.getResource());
 		this.resource.getModel().add(point.getResource().getModel());
@@ -44,11 +45,11 @@ public class NPrefecture {
 		if (shelterPoints == null || shelterPoints.length < 1)
 			return;
 
-		this.shelterPoints = new ShelterPoint[shelterPoints.length];
+		this.shelterPoints = new ArrayList<ShelterPoint>(shelterPoints.length);
+		// this.shelterPoints = new ShelterPoint[shelterPoints.length];
 
 		for (int i = 0; i < shelterPoints.length; i++) {
-			this.shelterPoints[i] = shelterPoints[i];
-
+			this.shelterPoints.add(shelterPoints[i]);
 			int cap = shelterPoints[i].getSeatingCapacity();
 			if (cap < 0)
 				cap = 0;
@@ -57,7 +58,7 @@ public class NPrefecture {
 
 		pointCount = shelterPoints.length;
 		averageCapacity = averageCapacity / pointCount;
-		
+
 		for (ShelterPoint point : shelterPoints) {
 			this.resource.addProperty(NProperty.hasShelterPoint,
 					point.getResource());
@@ -75,7 +76,7 @@ public class NPrefecture {
 	public int getAverageCapacity() {
 		return averageCapacity;
 	}
-	
+
 	public int getInvalidPointCount() {
 		return this.invalidPoinst.size();
 	}

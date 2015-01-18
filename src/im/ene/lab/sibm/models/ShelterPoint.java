@@ -1,5 +1,7 @@
 package im.ene.lab.sibm.models;
 
+import java.io.File;
+
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.NDataUtils;
 
@@ -167,5 +169,15 @@ public class ShelterPoint implements Data {
 	@Override
 	public String toString() {
 		return NDataUtils.GSON.toJson(this);
+	}
+	
+	private File file = null;
+	
+	public void setFile(File file) {
+		this.file = file;
+	}
+	
+	public File getFile() {
+		return this.file;
 	}
 }

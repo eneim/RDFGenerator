@@ -135,7 +135,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 
 		ShelterPoint[] points = readShelterGML(code);
 
-		if (points.length > max) {
+		if (points.length >= max) {
 			points = Arrays.copyOf(points, max);
 		}
 		
