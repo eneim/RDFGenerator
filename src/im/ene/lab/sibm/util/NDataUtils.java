@@ -83,7 +83,7 @@ public class NDataUtils {
 		model.setNsPrefix("geo", sibm_geo);
 		model.setNsPrefix("xsd", XSD.getURI());
 	}
-	
+
 	public static File gzip(File file) {
 		File ret = null;
 		try {
@@ -343,5 +343,5 @@ public class NDataUtils {
 		return ret;
 	}
 
-	public static final int[] HOKKAIDO = {1};
+	public static final int[] HOKKAIDO = { 1 };
 }

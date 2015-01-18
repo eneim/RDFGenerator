@@ -1,14 +1,11 @@
 package im.ene.lab.sibm.models;
 
+import im.ene.lab.sibm.util.NDataUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import im.ene.lab.sibm.util.NDataUtils;
-
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class NPrefecture {

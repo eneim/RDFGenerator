@@ -3,8 +3,8 @@ package im.ene.lab.sibm.map.ksj.shelter;
 import im.ene.lab.sibm.map.ksj.handler.ShelterDataHandler;
 import im.ene.lab.sibm.models.NPrefecture;
 import im.ene.lab.sibm.models.ShelterPoint;
-import im.ene.lab.sibm.util.NDataUtils;
 import im.ene.lab.sibm.util.GeneralFileFilter;
+import im.ene.lab.sibm.util.NDataUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -138,7 +138,7 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		if (points.length >= max) {
 			points = Arrays.copyOf(points, max);
 		}
-		
+
 		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
 		pref.setShelterPoints(points);
 		// pref.setShelterPoint(points[0]);

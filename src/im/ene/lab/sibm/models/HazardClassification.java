@@ -4,7 +4,6 @@ import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class HazardClassification implements Data {

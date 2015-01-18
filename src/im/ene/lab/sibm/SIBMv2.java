@@ -225,7 +225,8 @@ public class SIBMv2 {
 					// + prefDataset.getShelterPointCount());
 
 					for (int i = 0; i < prefDataset.getShelterPointCount(); i++) {
-						ShelterPoint point = prefDataset.getShelterPoints().get(i);
+						ShelterPoint point = prefDataset.getShelterPoints()
+								.get(i);
 						dataset.begin(ReadWrite.WRITE);
 						master.add(point.getResource().getModel());
 						// master.add(

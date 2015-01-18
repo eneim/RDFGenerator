@@ -196,7 +196,7 @@ public class Profile {
 	public void setOccupation(String occupation) {
 		this.occupation = occupation;
 	}
-	
+
 	@Override
 	public String toString() {
 		return NDataUtils.GSON.toJson(this);

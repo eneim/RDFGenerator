@@ -9,7 +9,7 @@ public class Prefecture {
 	public String nameEn;
 
 	public int region;
-	
+
 	public Integer shelterCount;
 
 	public Prefecture(int id, String nameJp, String nameEn, int region) {
@@ -22,7 +22,7 @@ public class Prefecture {
 	public void setShelterCount(int count) {
 		this.shelterCount = Integer.valueOf(count);
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.id + "-" + this.nameJp + "-" + this.nameEn + "-"

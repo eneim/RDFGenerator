@@ -1,12 +1,11 @@
 package im.ene.lab.sibm.models;
 
-import java.io.File;
-
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.NDataUtils;
 
+import java.io.File;
+
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class ShelterPoint implements Data {
@@ -127,14 +126,16 @@ public class ShelterPoint implements Data {
 			NGeoPoint p = (NGeoPoint) obj;
 			this.geoPoint = p;
 			this.resource.addProperty(NProperty.geopoint, p.getResource());
-			
-			this.resource.getModel().add(this.geoPoint.getResource().getModel());
+
+			this.resource.getModel()
+					.add(this.geoPoint.getResource().getModel());
 		} else if (obj instanceof HazardClassification) {
 			this.hazardClassification = (HazardClassification) obj;
 			this.resource.addProperty(NProperty.hazardClassification,
 					this.hazardClassification.getResource());
-			
-			this.resource.getModel().add(this.hazardClassification.getResource().getModel());
+
+			this.resource.getModel().add(
+					this.hazardClassification.getResource().getModel());
 		} else if (obj instanceof String) {
 			String string = (String) obj;
 			if ("ksj:name".equals(tag)) {
@@ -170,13 +171,13 @@ public class ShelterPoint implements Data {
 	public String toString() {
 		return NDataUtils.GSON.toJson(this);
 	}
-	
+
 	private File file = null;
-	
+
 	public void setFile(File file) {
 		this.file = file;
 	}
-	
+
 	public File getFile() {
 		return this.file;
 	}

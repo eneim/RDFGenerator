@@ -5,7 +5,6 @@ import im.ene.lab.sibm.map.ksj.NPoint;
 import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 public class NGeoPoint implements Data {
@@ -13,7 +12,7 @@ public class NGeoPoint implements Data {
 	private Resource resource;
 
 	private Model model = NDataUtils.createModel();
-	
+
 	public NGeoPoint() {
 		this.resource = model.createResource();
 	}
@@ -50,7 +49,7 @@ public class NGeoPoint implements Data {
 			NPoint point = (NPoint) obj;
 			this.lat = point.getX();
 			this.lng = point.getY();
-			
+
 		}
 	}
 

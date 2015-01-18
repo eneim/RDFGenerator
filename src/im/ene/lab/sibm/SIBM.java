@@ -19,7 +19,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -210,9 +209,8 @@ public class SIBM {
 								pages[i] = pageList.remove(0);
 							}
 
-							int max = pages.length
-									* prefDataset.getAverageCapacity() / 3;
-							max = Generator.genRandomInt(max / 3, max);
+							int max = pages.length * getAvarageSeat();
+							max = Generator.genRandomInt(max / 2, max);
 							shelterCount += pages.length;
 							// TODO
 							personCount += genPeople(max);
@@ -221,7 +219,7 @@ public class SIBM {
 							// TODO
 							tripleCount += save(pref, prefDataset);
 							// end
-							
+
 							pages = null;
 							pageIndex = null;
 						}
@@ -261,6 +259,11 @@ public class SIBM {
 			int tripleCount = 0;
 			for (int i = 0; i < pages.length; i++) {
 				ShelterPoint point = pages[i];
+
+				Model model = point.getResource().getModel();
+
+				System.out.println("before: " + model.getGraph().size());
+
 				String fileName = dir + File.separatorChar + "gen"
 						+ File.separatorChar + pref.nameEn + "_"
 						+ point.getAdministrativeAreaCode() + "_"
@@ -275,7 +278,6 @@ public class SIBM {
 				BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
 						new FileOutputStream(file)), 1024 * 8);
 				// FileOutputStream outFile = new FileOutputStream(file);
-				Model model = point.getResource().getModel();
 				// model.write(outFile, "Turtle");
 				model.write(wr, "Turtle");
 				// outFile.close();
@@ -284,9 +286,9 @@ public class SIBM {
 				int size = model.getGraph().size();
 				tripleCount += size;
 
-				System.out.println("writing: " + fileName + " | "
-						+ pageIndex[i] + " - counter: "
-						+ prefDataset.getShelterPoints().size());
+				// System.out.println("writing: " + fileName + " | "
+				// + pageIndex[i] + " - counter: "
+				// + prefDataset.getShelterPoints().size());
 
 				model = null;
 				file = null;
@@ -306,7 +308,6 @@ public class SIBM {
 		private int genPeople(int max) {
 			int personCount = 0;
 			while (max > 0) {
-				max--;
 				try {
 					// NPerson p = Generator.genPerson();
 					NPerson[] family = Generator.genFamily(
@@ -314,6 +315,7 @@ public class SIBM {
 							Generator.genRandomInt(0, 2));
 
 					personCount += family.length;
+					max -= family.length;
 					for (NPerson p : family)
 						if (p != null && p.getProfile() != null)
 							synchronized (p) {
@@ -337,5 +339,19 @@ public class SIBM {
 
 			return personCount;
 		}
+
+		private int getAvarageSeat() {
+			if (pages == null || pages.length == 0)
+				return 0;
+
+			int max = 0;
+			for (ShelterPoint p : pages) {
+				if (p.getSeatingCapacity() >= 0)
+					max += p.getSeatingCapacity();
+			}
+
+			return max / pages.length;
+		}
 	}
+
 }

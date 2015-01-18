@@ -1,19 +1,15 @@
 package im.ene.lab.sibm.generator;
 
-import java.rmi.server.UID;
+import im.ene.lab.sibm.models.NPerson;
+import im.ene.lab.sibm.models.NUserType;
+import im.ene.lab.sibm.models.Profile;
+
 import java.util.Calendar;
 import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-
-import im.ene.lab.sibm.models.NPerson;
-import im.ene.lab.sibm.models.NUserType;
-import im.ene.lab.sibm.models.Profile;
-
-import com.hp.hpl.jena.shared.uuid.UUID_V4;
-import com.hp.hpl.jena.shared.uuid.UUID_V4_Gen;
 
 public class Generator {
 
@@ -39,7 +35,8 @@ public class Generator {
 
 		}
 
-		System.out.println((float) t1 / 5000 + " | " + (float) t2 / 5000 + " | " + (float) t3 / 5000);
+		System.out.println((float) t1 / 5000 + " | " + (float) t2 / 5000
+				+ " | " + (float) t3 / 5000);
 
 	}
 
@@ -150,6 +147,7 @@ public class Generator {
 			break;
 		case 2:
 			max = 28;
+			break;
 		case 4:
 		case 6:
 		case 9:
@@ -157,13 +155,10 @@ public class Generator {
 			max = 30;
 			break;
 		default:
-			max = -1;
+			max = 1;
 			break;
 		}
-
-		if (max == -1)
-			return 1;
-
+		
 		return genRandomInt(1, max);
 	}
 
@@ -296,7 +291,7 @@ public class Generator {
 			} else {
 				// continue
 				// rate of dead: age / DEFAULT_MAX_AGE;
-				
+
 				grandFather = genPersion(
 						grandFatherAge,
 						fName,
