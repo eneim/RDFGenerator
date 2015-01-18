@@ -11,12 +11,15 @@ import im.ene.lab.sibm.util.NFileUtils;
 import im.ene.lab.sibm.util.dataofjapan.Prefecture;
 import im.ene.lab.sibm.util.dataofjapan.Region;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,6 +89,8 @@ public class SIBM {
 
 		private int[] regionIndexMap = new int[MAX_REGION];
 
+		private final int PAGE_SIZE = 6;
+
 		private ShelterDataLoaderImpl shelterLoader;
 
 		private ShelterPoint[] pages;
@@ -103,10 +108,11 @@ public class SIBM {
 		}
 
 		public Builder init() {
-			FileReader reader = null;
+			BufferedReader reader = null;
 			try {
-				reader = new FileReader(dir + File.separatorChar
-						+ "regions.json");
+				reader = new BufferedReader(new InputStreamReader(
+						new FileInputStream(new File(dir + File.separatorChar
+								+ "regions.json"))));
 
 				this.regions = NDataUtils.GSON.fromJson(reader,
 						new TypeToken<List<Region>>() {
@@ -144,10 +150,9 @@ public class SIBM {
 
 			this.shelterPointCount = count;
 
-			for (int i = 0; i < regions.size(); i++) {
+			for (int i = 1; i < regions.size(); i++) {
 				Region region = regions.get(i);
 				count -= region.shelterCount;
-
 				if (count < 0) {
 					regionIndexMap[i] = count + region.shelterCount;
 					break;
@@ -170,21 +175,22 @@ public class SIBM {
 			NFileUtils readme = new NFileUtils("log.txt");
 			readme.start(true);
 
-			int regionCount = 0;
 			int counter = this.shelterPointCount;
+
+			int regionIndex = 1;
 			int shelterCount = 0;
 			int personCount = 0;
 			int tripleCount = 0;
 
 			readme.writeLine("Input shelter count: " + this.shelterPointCount);
 
-			while (regionCount < MAX_REGION) {
-				if (regionIndexMap[regionCount] == 0) {
+			while (regionIndex < MAX_REGION) {
+				if (regionIndexMap[regionIndex] == 0) {
 					break;
 				}
 
 				// regionIndexMap[regionCount] > 0
-				for (Prefecture pref : regions.get(regionCount).prefectures) {
+				for (Prefecture pref : regions.get(regionIndex).prefectures) {
 					NPrefecture prefDataset = shelterLoader.getPrefectureData(
 							pref.id, counter);
 
@@ -193,14 +199,11 @@ public class SIBM {
 					ArrayList<ShelterPoint> pageList = prefDataset
 							.getShelterPoints();
 
-					Collections
-							.shuffle(pageList, new Random(System.nanoTime()));
-
 					// "paging"
 					while (pageList.size() > 0) {
 						synchronized (pageList) {
-							int len = pageList.size() >= 10 ? 10 : pageList
-									.size();
+							int len = pageList.size() >= PAGE_SIZE ? PAGE_SIZE
+									: pageList.size();
 							pages = new ShelterPoint[len];
 							pageIndex = new int[len];
 
@@ -246,7 +249,7 @@ public class SIBM {
 					}
 				}
 
-				regionCount++;
+				regionIndex++;
 				if (counter <= 0) {
 					readme.end();
 					break;
@@ -262,11 +265,17 @@ public class SIBM {
 
 				Model model = point.getResource().getModel();
 
-				System.out.println("before: " + model.getGraph().size());
+				// System.out.println("before: " + model.getGraph().size());
 
-				String fileName = dir + File.separatorChar + "gen"
-						+ File.separatorChar + pref.nameEn + "_"
-						+ point.getAdministrativeAreaCode() + "_"
+				File dir_ = new File(dir + File.separatorChar + "gen"
+						+ File.separatorChar + pref.nameEn);
+
+				if (!dir_.exists())
+					dir_.mkdirs();
+
+				String fileName = dir_.getPath() + File.separatorChar
+						+ pref.nameEn + "_" + point.getAdministrativeAreaCode()
+						+ "_"
 						+ (prefDataset.getShelterPointCount() - pageIndex[i])
 						+ ".ttl";
 
@@ -286,10 +295,11 @@ public class SIBM {
 				int size = model.getGraph().size();
 				tripleCount += size;
 
-				// System.out.println("writing: " + fileName + " | "
-				// + pageIndex[i] + " - counter: "
-				// + prefDataset.getShelterPoints().size());
+				System.out.println("writing: " + file.getName()
+						+ " - remaing: "
+						+ prefDataset.getShelterPoints().size());
 
+				model.close();
 				model = null;
 				file = null;
 				point = null;
