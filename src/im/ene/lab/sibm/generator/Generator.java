@@ -158,7 +158,7 @@ public class Generator {
 			max = 1;
 			break;
 		}
-		
+
 		return genRandomInt(1, max);
 	}
 
@@ -195,6 +195,19 @@ public class Generator {
 		return result;
 	}
 
+	private static int genChildCount() {
+		// distribute: 2 : 1: 3 : 4 = 45 : 40 : 12.5 : 2.5
+		double ran = Math.random();
+		if (ran >= 0.55)
+			return 2;
+		else if (ran >= 0.15)
+			return 1;
+		else if (ran >= 0.025)
+			return 3;
+		else
+			return 4;
+	}
+
 	private static String fixName(String original) {
 		return original.length() == 0 ? original : original.substring(0, 1)
 				.toUpperCase() + original.substring(1);
@@ -228,7 +241,9 @@ public class Generator {
 		if (depth == 0) {
 			return new NPerson[] { genPerson() };
 		} else {
-			int childCount = genRandomInt(0, 3);
+			// int childCount = genRandomInt(0, 4);
+			int childCount = genChildCount();
+
 			if (childCount == 0) {
 				// start from father age
 				fatherAge = genRandomInt(20, 60);

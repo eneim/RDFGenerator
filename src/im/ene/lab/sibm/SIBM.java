@@ -23,12 +23,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.jena.riot.RDFDataMgr;
+
 import com.google.gson.reflect.TypeToken;
+import com.hp.hpl.jena.query.Dataset;
+import com.hp.hpl.jena.query.LabelExistsException;
+import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.util.FileManager;
 
 public class SIBM {
 
@@ -59,16 +69,16 @@ public class SIBM {
 
 	public static String benchmark(int count) throws IOException {
 		int complexity = 0;
-		int shelterCount = count;
 		long start = System.nanoTime();
-		(new Builder()).init().setShelterCount(shelterCount)
-				.setComplexity(complexity).execute();
+		(new Builder(count)).init().setup().setComplexity(complexity).execute()
+				.importToDatabase();
+
 		return count + "," + (System.nanoTime() - start) / 1000000;
 	}
 
 	public static class Builder {
 		// strategy builder
-		private int shelterPointCount;
+		private final int shelterPointCount;
 
 		private boolean isGenerateByShelterCount = true; // true by default;
 		private boolean isGenerateByPrefCode = false;
@@ -89,7 +99,8 @@ public class SIBM {
 
 		private int[] regionIndexMap = new int[MAX_REGION];
 
-		private final int PAGE_SIZE = 6;
+		// max people per family
+		private final int PAGE_SIZE = 8;
 
 		private ShelterDataLoaderImpl shelterLoader;
 
@@ -105,8 +116,8 @@ public class SIBM {
 			return input;
 		}
 
-		public Builder() {
-
+		public Builder(int shelterCount) {
+			this.shelterPointCount = validate(shelterCount, MAX_SHELTER_POINT);
 		}
 
 		public Builder init() {
@@ -147,11 +158,9 @@ public class SIBM {
 			return this;
 		}
 
-		public Builder setShelterCount(int count) {
+		public Builder setup() {
 			// create strategy by input count
-			count = validate(count, MAX_SHELTER_POINT);
-
-			this.shelterPointCount = count;
+			int count = this.shelterPointCount;
 
 			for (int i = 0; i < regions.size(); i++) {
 				Region region = regions.get(i);
@@ -168,7 +177,7 @@ public class SIBM {
 			return this;
 		}
 
-		public void execute() throws IOException {
+		public Builder execute() throws IOException {
 			// input: number of shelter;
 			// input: data complexity;
 			// strategy: list of prefecture and number of shelter point each
@@ -258,6 +267,69 @@ public class SIBM {
 					break;
 				}
 			}
+
+			return this;
+		}
+
+		public Builder importToDatabase() throws LabelExistsException, IOException {
+			File dataBase = new File(dir + File.separatorChar + "data_"
+					+ this.shelterPointCount + "_" + System.currentTimeMillis());
+			if (!dataBase.exists())
+				dataBase.mkdirs();
+
+			Dataset dataset = TDBFactory.createDataset(dataBase.getPath());
+			dataset.getContext().set(TDB.symUnionDefaultGraph, true);
+
+			File fileDir = new File(dir + File.separatorChar + "gen_"
+					+ this.shelterPointCount);
+			if (!fileDir.exists()) {
+				// no file, end
+				return this;
+			}
+
+			File[] subFolders = fileDir.listFiles();
+			System.out.println(subFolders.length);
+			for (File sub : subFolders) {
+				if (sub.isFile())
+					continue;
+				else {
+					// load file from folder to model;
+					File[] dataFiles = sub.listFiles();
+					if (dataFiles.length == 0)
+						return this;
+
+					dataset.begin(ReadWrite.WRITE);
+
+					for (File file : dataFiles) {
+						dataset.addNamedModel(
+								FilenameUtils.getBaseName(file.getName()),
+								FileManager.get().loadModel(file.getCanonicalPath()));
+					}
+
+				}
+			}
+
+			dataset.commit();
+			dataset.end();
+
+			dataset.begin(ReadWrite.READ);
+			Iterator<String> graphs = dataset.listNames();
+			while (graphs.hasNext()) {
+				String g = graphs.next();
+				System.out.println(g + " - "
+						+ dataset.getNamedModel(g).getGraph().size());
+			}
+
+			System.out.println("default - "
+					+ dataset.getNamedModel("urn:x-arq:UnionGraph").getGraph()
+							.size());
+
+			dataset.end();
+			dataset.close();
+
+			System.out.println("data size: " + NDataUtils.folderSize(dataBase));
+
+			return this;
 		}
 
 		private int save(Prefecture pref, NPrefecture prefDataset)
@@ -268,10 +340,9 @@ public class SIBM {
 
 				Model model = point.getResource().getModel();
 
-				// System.out.println("before: " + model.getGraph().size());
-
-				File dir_ = new File(dir + File.separatorChar + "gen"
-						+ File.separatorChar + pref.nameEn);
+				File dir_ = new File(dir + File.separatorChar + "gen_"
+						+ this.shelterPointCount + File.separatorChar
+						+ pref.nameEn);
 
 				if (!dir_.exists())
 					dir_.mkdirs();
