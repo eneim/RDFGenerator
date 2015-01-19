@@ -96,6 +96,8 @@ public class SIBM {
 		private ShelterPoint[] pages;
 		private int[] pageIndex;
 
+		private int shelterNum;
+
 		private int validate(int input, int max) {
 			if (input > max)
 				input = max;
@@ -108,6 +110,7 @@ public class SIBM {
 		}
 
 		public Builder init() {
+			shelterNum = 0;
 			BufferedReader reader = null;
 			try {
 				reader = new BufferedReader(new InputStreamReader(
@@ -150,7 +153,7 @@ public class SIBM {
 
 			this.shelterPointCount = count;
 
-			for (int i = 1; i < regions.size(); i++) {
+			for (int i = 0; i < regions.size(); i++) {
 				Region region = regions.get(i);
 				count -= region.shelterCount;
 				if (count < 0) {
@@ -177,7 +180,7 @@ public class SIBM {
 
 			int counter = this.shelterPointCount;
 
-			int regionIndex = 1;
+			int regionIndex = 0;
 			int shelterCount = 0;
 			int personCount = 0;
 			int tripleCount = 0;
@@ -212,7 +215,7 @@ public class SIBM {
 								pages[i] = pageList.remove(0);
 							}
 
-							int max = pages.length * getAvarageSeat();
+							int max = getMaxSeat();
 							max = Generator.genRandomInt(max / 2, max);
 							shelterCount += pages.length;
 							// TODO
@@ -295,9 +298,8 @@ public class SIBM {
 				int size = model.getGraph().size();
 				tripleCount += size;
 
-				System.out.println("writing: " + file.getName()
-						+ " - remaing: "
-						+ prefDataset.getShelterPoints().size());
+				System.out.println("file: " + file.getName() + " - finished: "
+						+ ++shelterNum);
 
 				model.close();
 				model = null;
@@ -307,8 +309,7 @@ public class SIBM {
 
 			try {
 				System.gc();
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -316,7 +317,7 @@ public class SIBM {
 		}
 
 		private int genPeople(int max) {
-			int personCount = 0;
+			int personCount_ = 0;
 			while (max > 0) {
 				try {
 					// NPerson p = Generator.genPerson();
@@ -324,7 +325,7 @@ public class SIBM {
 							Generator.genLastName(),
 							Generator.genRandomInt(0, 2));
 
-					personCount += family.length;
+					personCount_ += family.length;
 					max -= family.length;
 					for (NPerson p : family)
 						if (p != null && p.getProfile() != null)
@@ -339,6 +340,8 @@ public class SIBM {
 											randomPoint.getResource());
 									randomPoint.getResource().getModel()
 											.add(res.getModel());
+
+									// res.getModel().close();
 								}
 							}
 					family = null;
@@ -347,10 +350,10 @@ public class SIBM {
 				}
 			}
 
-			return personCount;
+			return personCount_;
 		}
 
-		private int getAvarageSeat() {
+		private int getMaxSeat() {
 			if (pages == null || pages.length == 0)
 				return 0;
 
@@ -358,9 +361,11 @@ public class SIBM {
 			for (ShelterPoint p : pages) {
 				if (p.getSeatingCapacity() >= 0)
 					max += p.getSeatingCapacity();
+				else
+					max += 500;
 			}
 
-			return max / pages.length;
+			return max;
 		}
 	}
 
