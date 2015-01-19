@@ -138,8 +138,9 @@ public class NPerson {
 				res.addLiteral(NProperty.phone, profile.getPhone());
 
 			this.resource.addProperty(NProperty.profile, res);
-
 			this.resource.getModel().add(res.getModel());
+			
+			res.getModel().close();
 		}
 	}
 
