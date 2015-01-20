@@ -312,6 +312,11 @@ public class Generator {
 			if (hasChild) {
 				father.setChildren(children);
 				mother.setChildren(children);
+
+				for (NPerson child : children) {
+					child.setFather(father);
+					child.setMother(mother);
+				}
 			}
 
 			NPerson[] parent = new NPerson[] { father, mother };
