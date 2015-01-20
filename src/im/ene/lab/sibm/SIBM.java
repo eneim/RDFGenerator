@@ -17,23 +17,26 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.jena.riot.RDFDataMgr;
 
 import com.google.gson.reflect.TypeToken;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.LabelExistsException;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDB;
@@ -46,6 +49,7 @@ public class SIBM {
 
 	public static void main(String... args) throws IOException {
 		int shelterCount = 10;
+		String queryFile = null;
 
 		// benchmark(shelterCount);
 
@@ -53,25 +57,27 @@ public class SIBM {
 			System.out
 					.println("Invalid shelter count. \nUsage: java -jar SIBM.jar -count 100");
 			return;
-		} else {
-			if (!args[0].startsWith("-count")) {
-				System.out
-						.println("Invalid shelter count. \nUsage: java -jar SIBM.jar -count 100");
-				return;
-			} else {
-				shelterCount = Integer.valueOf(args[1]);
-			}
 		}
 
-		System.out.println(benchmark(shelterCount));
+		shelterCount = Integer.valueOf(args[1]);
+
+		if (args.length >= 4)
+			queryFile = args[3];
+
+		try {
+			System.out.println(benchmark(shelterCount, queryFile));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
-	public static String benchmark(int count) throws IOException {
+	public static String benchmark(int count, String queryFile)
+			throws Exception {
 		int complexity = 0;
 		long start = System.nanoTime();
 		(new Builder(count)).init().setup().setComplexity(complexity).execute()
-				.importToDatabase();
+				.importToDatabase().query(queryFile);
 
 		return count + "," + (System.nanoTime() - start) / 1000000;
 	}
@@ -108,6 +114,10 @@ public class SIBM {
 		private int[] pageIndex;
 
 		private int shelterNum;
+
+		// private Dataset dataset;
+
+		private File dataBase = null;
 
 		private int validate(int input, int max) {
 			if (input > max)
@@ -271,8 +281,9 @@ public class SIBM {
 			return this;
 		}
 
-		public Builder importToDatabase() throws LabelExistsException, IOException {
-			File dataBase = new File(dir + File.separatorChar + "data_"
+		public Builder importToDatabase() throws LabelExistsException,
+				IOException {
+			this.dataBase = new File(dir + File.separatorChar + "data_"
 					+ this.shelterPointCount + "_" + System.currentTimeMillis());
 			if (!dataBase.exists())
 				dataBase.mkdirs();
@@ -303,7 +314,8 @@ public class SIBM {
 					for (File file : dataFiles) {
 						dataset.addNamedModel(
 								FilenameUtils.getBaseName(file.getName()),
-								FileManager.get().loadModel(file.getCanonicalPath()));
+								FileManager.get().loadModel(
+										file.getCanonicalPath()));
 					}
 
 				}
@@ -325,10 +337,9 @@ public class SIBM {
 							.size());
 
 			dataset.end();
-			dataset.close();
-
 			System.out.println("data size: " + NDataUtils.folderSize(dataBase));
 
+			dataset.close();
 			return this;
 		}
 
@@ -422,6 +433,60 @@ public class SIBM {
 			}
 
 			return personCount_;
+		}
+
+		private Builder query(String queryFile) throws Exception {
+			if (this.dataBase == null)
+				return this;
+
+			if (queryFile == null)
+				return this;
+
+			Dataset dataset = TDBFactory.createDataset(this.dataBase.getPath());
+			dataset.getContext().set(TDB.symUnionDefaultGraph, true);
+
+			long start = System.nanoTime();
+			dataset.begin(ReadWrite.READ);
+
+			File qFile = new File(dir + File.separatorChar + "query"
+					+ File.separatorChar + queryFile);
+			if (!qFile.exists()) {
+				System.out.println("query file not found");
+				throw new FileNotFoundException("query file not found");
+			}
+
+			File resultDir = new File(dir + File.separatorChar + "result");
+			if (!resultDir.exists())
+				resultDir.mkdirs();
+
+			File rsFile = new File(resultDir.getPath() + File.separatorChar
+					+ dataBase.getName() + "queryresult.csv");
+			if (rsFile.exists())
+				rsFile.delete();
+			else {
+				rsFile.createNewFile();
+			}
+
+			String query = FileUtils.readFileToString(qFile);
+			Query select = QueryFactory.create(query);
+
+			ResultSet rs;
+
+			try (QueryExecution qExec = QueryExecutionFactory.create(select,
+					dataset)) {
+				rs = qExec.execSelect();
+//				ResultSetFormatter
+//						.outputAsCSV(new FileOutputStream(rsFile), rs);
+				ResultSetFormatter.out(rs);
+			}
+
+			dataset.end();
+
+			System.out.println("Query time: " + (System.nanoTime() - start)
+					/ 1000000 + "ms");
+
+			dataset.close();
+			return this;
 		}
 
 		private int getMaxSeat() {

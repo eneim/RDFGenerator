@@ -42,6 +42,11 @@ public class NProperty {
 	public static final Property hazardClassification = m.createProperty(sibm
 			+ "hazardClassification");
 
+	public static final Property storageRice = m.createProperty(sibm
+			+ "storageRice");
+	public static final Property storageWater = m.createProperty(sibm
+			+ "storageWater");
+	
 	public static final Property geopoint = m.createProperty(sibm_geo
 			+ "geopoint");
 	public static final Property latitude;
@@ -53,6 +58,7 @@ public class NProperty {
 
 	public static final Property stayAt;
 
+	public static final Property status, statusLevel, statusName;
 	static {
 
 		earthquakeHazard = m.createProperty(sibm + "earthquakeHazard");
@@ -86,6 +92,9 @@ public class NProperty {
 		occupation = m.createProperty(sibm + "occupation");
 
 		stayAt = m.createProperty(sibm + "stayAt");
+		status = m.createProperty(sibm + "status");
+		statusName = m.createProperty(sibm + "statusName");
+		statusLevel = m.createProperty(sibm + "statusLevel");
 	}
 
 	public static final Property hasFather = m.createProperty(sibm

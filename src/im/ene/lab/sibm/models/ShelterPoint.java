@@ -1,5 +1,6 @@
 package im.ene.lab.sibm.models;
 
+import im.ene.lab.sibm.generator.Generator;
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.NDataUtils;
 
@@ -48,6 +49,8 @@ public class ShelterPoint implements Data {
 	private int seatingCapacity;
 
 	private int facilityScale;
+
+	private int storageRice, storageWater;
 
 	private HazardClassification hazardClassification;
 
@@ -148,9 +151,14 @@ public class ShelterPoint implements Data {
 				this.facilityType = string;
 				this.resource.addLiteral(NProperty.facilityType, string);
 			} else if ("ksj:seatingCapacity".equals(tag)) {
-				this.seatingCapacity = Integer.valueOf(string);
+				int val = Integer.valueOf(string);
+				if (val < 0)
+					val = 400;
+				this.seatingCapacity = val;
 				this.resource.addLiteral(NProperty.seatingCapacity,
-						model.createTypedLiteral(this.seatingCapacity));
+						model.createTypedLiteral(val));
+				// TODO FIXME
+				setStorage();
 			} else if ("ksj:facilityScale".equals(tag)) {
 				this.facilityScale = Integer.valueOf(string);
 				this.resource.addLiteral(NProperty.facilityScale,
@@ -180,5 +188,16 @@ public class ShelterPoint implements Data {
 
 	public File getFile() {
 		return this.file;
+	}
+
+	private void setStorage() {
+		this.storageRice = Generator.genRandomInt(this.seatingCapacity / 2,
+				this.seatingCapacity * 4);
+		this.resource.addLiteral(NProperty.storageRice,
+				model.createTypedLiteral(this.storageRice));
+		this.storageWater = Generator.genRandomInt(this.seatingCapacity / 10,
+				this.seatingCapacity / 2);
+		this.resource.addLiteral(NProperty.storageWater,
+				model.createTypedLiteral(this.storageWater));
 	}
 }

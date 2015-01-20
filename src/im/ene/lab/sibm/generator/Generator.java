@@ -1,6 +1,7 @@
 package im.ene.lab.sibm.generator;
 
 import im.ene.lab.sibm.models.NPerson;
+import im.ene.lab.sibm.models.NStatus;
 import im.ene.lab.sibm.models.NUserType;
 import im.ene.lab.sibm.models.Profile;
 
@@ -80,6 +81,22 @@ public class Generator {
 		NPerson person = new NPerson(id.toString());
 		person.setProfile(profile);
 		person.setType(genType(age));
+
+		// set status
+		if (NUserType.ASSISTANT.equals(person.getType())
+				|| NUserType.VOLUNTEER.equals(person.getType())) {
+			person.setStatus(NStatus.NORMAL);
+		} else {
+			double ran = Math.random();
+			if (ran >= 0.5)
+				person.setStatus(NStatus.NORMAL);
+			else if (ran >= 0.2)
+				person.setStatus(NStatus.MINOR);
+			else if (ran >= 0.025)
+				person.setStatus(NStatus.MODERATE);
+			else
+				person.setStatus(NStatus.SERIOUS);
+		}
 
 		return person;
 	}

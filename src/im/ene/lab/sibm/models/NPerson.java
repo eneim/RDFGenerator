@@ -31,6 +31,18 @@ public class NPerson {
 		ID = iD;
 	}
 
+	private NStatus status;
+
+	public NStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(NStatus status) {
+		this.status = status;
+		this.resource.addProperty(NProperty.status, status.getResource());
+		this.resource.getModel().add(status.getResource().getModel());
+	}
+
 	private NUserType type;
 
 	public NUserType getType() {
@@ -39,8 +51,8 @@ public class NPerson {
 
 	public void setType(NUserType type) {
 		this.type = type;
-		this.resource.addProperty(RDF.type, getType().getResource());
-		this.resource.getModel().add(getType().getResource().getModel());
+		this.resource.addProperty(RDF.type, type.getResource());
+		this.resource.getModel().add(type.getResource().getModel());
 	}
 
 	private Profile profile;
@@ -129,7 +141,10 @@ public class NPerson {
 					.addLiteral(NProperty.surname, profile.getSurname())
 					.addLiteral(NProperty.gender, profile.getGender())
 					.addLiteral(NProperty.birthday, profile.getBirthday())
-					.addLiteral(NProperty.age, profile.getAge())
+					.addLiteral(
+							NProperty.age,
+							model.createTypedLiteral(Integer.valueOf(profile
+									.getAge())))
 					// .addLiteral(NProperty.address, profile.getAddress())
 					// .addLiteral(NProperty.zipCode, profile.getZipCode())
 					.addLiteral(NProperty.email, profile.getEmail());
@@ -139,7 +154,7 @@ public class NPerson {
 
 			this.resource.addProperty(NProperty.profile, res);
 			this.resource.getModel().add(res.getModel());
-			
+
 			res.getModel().close();
 		}
 	}
