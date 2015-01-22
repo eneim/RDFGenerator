@@ -46,7 +46,9 @@ public class NProperty {
 			+ "storageRice");
 	public static final Property storageWater = m.createProperty(sibm
 			+ "storageWater");
-	
+	public static final Property storageMedicine = m.createProperty(sibm
+			+ "storageMedicine");
+
 	public static final Property geopoint = m.createProperty(sibm_geo
 			+ "geopoint");
 	public static final Property latitude;
@@ -59,6 +61,7 @@ public class NProperty {
 	public static final Property stayAt;
 
 	public static final Property status, statusLevel, statusName;
+
 	static {
 
 		earthquakeHazard = m.createProperty(sibm + "earthquakeHazard");

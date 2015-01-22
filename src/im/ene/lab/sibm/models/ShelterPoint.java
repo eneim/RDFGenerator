@@ -50,7 +50,7 @@ public class ShelterPoint implements Data {
 
 	private int facilityScale;
 
-	private int storageRice, storageWater;
+	private int storageRice, storageWater, storageMedicine;
 
 	private HazardClassification hazardClassification;
 

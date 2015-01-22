@@ -475,15 +475,16 @@ public class SIBM {
 			try (QueryExecution qExec = QueryExecutionFactory.create(select,
 					dataset)) {
 				rs = qExec.execSelect();
-//				ResultSetFormatter
-//						.outputAsCSV(new FileOutputStream(rsFile), rs);
-				ResultSetFormatter.out(rs);
+				ResultSetFormatter
+						.outputAsCSV(new FileOutputStream(rsFile), rs);
+				// ResultSetFormatter.out(rs);
 			}
 
 			dataset.end();
 
-			System.out.println("Query time: " + (System.nanoTime() - start)
-					/ 1000000 + "ms");
+			System.out.println("Shelter count: " + this.shelterPointCount
+					+ " - Query file: " + queryFile + " - Query time: "
+					+ (System.nanoTime() - start) / 1000000 + "ms");
 
 			dataset.close();
 			return this;
