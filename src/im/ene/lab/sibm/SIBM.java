@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -76,8 +77,8 @@ public class SIBM {
 			throws Exception {
 		int complexity = 0;
 		long start = System.nanoTime();
-		(new Builder(count)).init().setup().setComplexity(complexity).execute()
-				.importToDatabase().query(queryFile);
+		(new Builder(count)).setupStrategy().setComplexity(complexity)
+				.execute().importToDatabase().query(queryFile);
 
 		return count + "," + (System.nanoTime() - start) / 1000000;
 	}
@@ -86,9 +87,8 @@ public class SIBM {
 		// strategy builder
 		private final int shelterPointCount;
 
-		private boolean isGenerateByShelterCount = true; // true by default;
-		private boolean isGenerateByPrefCode = false;
-		private boolean isGenerateByRegionCode = false;
+		// log file
+		private final NFileUtils logFile;
 
 		private int[] regionCodes;
 		private int personCount;
@@ -97,16 +97,18 @@ public class SIBM {
 
 		private List<Region> regions = new ArrayList<Region>();
 
-		private final int MAX_REGION = 9;
+		private final int sRegionCount = 9;
 
 		private final int MAX_PREF = 47;
 
-		private final int MAX_SHELTER_POINT = 125928;
+		private final int sMaxShelterCount = 125928;
 
-		private int[] regionIndexMap = new int[MAX_REGION];
+		private int sDefaultAverageCapacity = 500;
+
+		private int[] regionIndexMap = new int[sRegionCount];
 
 		// max people per family
-		private final int PAGE_SIZE = 8;
+		private final int sMaxPagesize = 8;
 
 		private ShelterDataLoaderImpl shelterLoader;
 
@@ -115,8 +117,7 @@ public class SIBM {
 
 		private int shelterNum;
 
-		// private Dataset dataset;
-
+		private final String fileRoot;
 		private File dataBase = null;
 
 		private int validate(int input, int max) {
@@ -127,10 +128,22 @@ public class SIBM {
 		}
 
 		public Builder(int shelterCount) {
-			this.shelterPointCount = validate(shelterCount, MAX_SHELTER_POINT);
-		}
+			this.shelterPointCount = validate(shelterCount, sMaxShelterCount);
 
-		public Builder init() {
+			this.fileRoot = dir + File.separatorChar + "gen_"
+					+ this.shelterPointCount;
+
+			String globalTime = NFileUtils.fileDate.format(new Date());
+
+			this.logFile = new NFileUtils("log_" + shelterCount + "_"
+					+ globalTime + ".txt");
+
+			this.dataBase = new File(dir + File.separatorChar + "data_"
+					+ this.shelterPointCount + "_" + globalTime);
+			if (!dataBase.exists())
+				dataBase.mkdirs();
+
+			// init
 			shelterNum = 0;
 			BufferedReader reader = null;
 			try {
@@ -158,8 +171,6 @@ public class SIBM {
 
 			shelterLoader = new ShelterDataLoaderImpl(dir + File.separatorChar
 					+ "original", dir + File.separatorChar + "csv");
-
-			return this;
 		}
 
 		public Builder setComplexity(int complexity) {
@@ -168,7 +179,9 @@ public class SIBM {
 			return this;
 		}
 
-		public Builder setup() {
+		// TODO improve this
+
+		public Builder setupStrategy() {
 			// create strategy by input count
 			int count = this.shelterPointCount;
 
@@ -194,9 +207,6 @@ public class SIBM {
 			// need to generate
 			// scale = -1 equal to 5000 people
 
-			NFileUtils readme = new NFileUtils("log.txt");
-			readme.start(true);
-
 			int counter = this.shelterPointCount;
 
 			int regionIndex = 0;
@@ -204,10 +214,23 @@ public class SIBM {
 			int personCount = 0;
 			int tripleCount = 0;
 
-			readme.writeLine("Input shelter count: " + this.shelterPointCount);
+			this.logFile.start(true);
+			this.logFile.writeLine("--- start generating ---");
+			this.logFile.writeLine("Input shelter count: "
+					+ this.shelterPointCount);
 
-			while (regionIndex < MAX_REGION) {
+			long start = System.nanoTime();
+
+			while (true) {
+				if (regionIndex >= sRegionCount) {
+					break;
+				}
+
 				if (regionIndexMap[regionIndex] == 0) {
+					break;
+				}
+
+				if (counter <= 0) {
 					break;
 				}
 
@@ -216,48 +239,46 @@ public class SIBM {
 					NPrefecture prefDataset = shelterLoader.getPrefectureData(
 							pref.id, counter);
 
-					System.out.println("Average capacity: "
-							+ prefDataset.getAverageCapacity());
+					sDefaultAverageCapacity = prefDataset.getAverageCapacity();
+
 					ArrayList<ShelterPoint> pageList = prefDataset
 							.getShelterPoints();
 
 					// "paging"
 					while (pageList.size() > 0) {
 						synchronized (pageList) {
-							int len = pageList.size() >= PAGE_SIZE ? PAGE_SIZE
-									: pageList.size();
-							pages = new ShelterPoint[len];
-							pageIndex = new int[len];
+							int pageSize = validate(pageList.size(),
+									sMaxPagesize);
 
-							for (int i = 0; i < len; i++) {
+							pages = new ShelterPoint[pageSize];
+							pageIndex = new int[pageSize];
+
+							for (int i = 0; i < pageSize; i++) {
 								pageIndex[i] = pageList.size();
 								pages[i] = pageList.remove(0);
 							}
 
 							int max = getMaxSeat();
-							max = Generator.genRandomInt(max / 2, max);
 							shelterCount += pages.length;
+							counter -= pages.length;
 							// TODO
 							personCount += genPeople(max);
-							counter -= pages.length;
-
 							// TODO
-							tripleCount += save(pref, prefDataset);
+							tripleCount += save(pref.nameEn,
+									prefDataset.getShelterPointCount());
 							// end
-
 							pages = null;
 							pageIndex = null;
 						}
 					}
 
-					System.out.println(pref.id + " | " + pref.nameEn + " | "
-							+ prefDataset.getShelterPointCount());
-
 					if (counter <= 0) {
-						readme.writeLine("Output shelter count: "
+						this.logFile.writeLine("Output shelter count: "
 								+ shelterCount);
-						readme.writeLine("Output people count: " + personCount);
-						readme.writeLine("Output triple count: " + tripleCount);
+						this.logFile.writeLine("Output people count: "
+								+ personCount);
+						this.logFile.writeLine("Output triple count: "
+								+ tripleCount);
 
 						System.out.println("Output shelter count: "
 								+ shelterCount);
@@ -265,41 +286,38 @@ public class SIBM {
 								+ personCount);
 						System.out.println("Output triple count: "
 								+ tripleCount);
-
-						readme.end();
-						break;
 					}
 				}
 
 				regionIndex++;
-				if (counter <= 0) {
-					readme.end();
-					break;
-				}
 			}
+
+			this.logFile.writeLine("Generate time: "
+					+ (System.nanoTime() - start) / 1000000 + " ms");
+			this.logFile.writeLine("--- stop generating ---");
+			this.logFile.end();
 
 			return this;
 		}
 
 		public Builder importToDatabase() throws LabelExistsException,
 				IOException {
-			this.dataBase = new File(dir + File.separatorChar + "data_"
-					+ this.shelterPointCount + "_" + System.currentTimeMillis());
-			if (!dataBase.exists())
-				dataBase.mkdirs();
-
 			Dataset dataset = TDBFactory.createDataset(dataBase.getPath());
 			dataset.getContext().set(TDB.symUnionDefaultGraph, true);
 
-			File fileDir = new File(dir + File.separatorChar + "gen_"
-					+ this.shelterPointCount);
+			File fileDir = new File(this.fileRoot);
 			if (!fileDir.exists()) {
 				// no file, end
 				return this;
 			}
 
+			this.logFile.start(true);
+			this.logFile.writeLine("--- start importing ---");
+
+			long start = System.nanoTime();
+
 			File[] subFolders = fileDir.listFiles();
-			System.out.println(subFolders.length);
+			System.out.println("Number of file:" + subFolders.length);
 			for (File sub : subFolders) {
 				if (sub.isFile())
 					continue;
@@ -318,51 +336,46 @@ public class SIBM {
 										file.getCanonicalPath()));
 					}
 
+					dataFiles = null;
 				}
 			}
 
 			dataset.commit();
 			dataset.end();
 
-			dataset.begin(ReadWrite.READ);
-			Iterator<String> graphs = dataset.listNames();
-			while (graphs.hasNext()) {
-				String g = graphs.next();
-				System.out.println(g + " - "
-						+ dataset.getNamedModel(g).getGraph().size());
-			}
+			this.logFile.writeLine("Import time: "
+					+ (System.nanoTime() - start) / 1000000 + " ms");
 
-			System.out.println("default - "
+			dataset.begin(ReadWrite.READ);
+
+			this.logFile.writeLine("Data triple count: "
 					+ dataset.getNamedModel("urn:x-arq:UnionGraph").getGraph()
 							.size());
+			this.logFile.writeLine("Data size: "
+					+ NDataUtils.folderSizeMB(dataBase) + " MB");
+			this.logFile.writeLine("--- stop importing ---");
+			this.logFile.end();
 
 			dataset.end();
-			System.out.println("data size: " + NDataUtils.folderSize(dataBase));
-
 			dataset.close();
 			return this;
 		}
 
-		private int save(Prefecture pref, NPrefecture prefDataset)
+		private int save(String prefName, int prefShelterCount)
 				throws IOException {
+			File dir_ = new File(fileRoot + File.separatorChar + prefName);
+
+			if (!dir_.exists())
+				dir_.mkdirs();
+
 			int tripleCount = 0;
 			for (int i = 0; i < pages.length; i++) {
 				ShelterPoint point = pages[i];
-
 				Model model = point.getResource().getModel();
 
-				File dir_ = new File(dir + File.separatorChar + "gen_"
-						+ this.shelterPointCount + File.separatorChar
-						+ pref.nameEn);
-
-				if (!dir_.exists())
-					dir_.mkdirs();
-
 				String fileName = dir_.getPath() + File.separatorChar
-						+ pref.nameEn + "_" + point.getAdministrativeAreaCode()
-						+ "_"
-						+ (prefDataset.getShelterPointCount() - pageIndex[i])
-						+ ".ttl";
+						+ prefName + "_" + point.getAdministrativeAreaCode()
+						+ "_" + (prefShelterCount - pageIndex[i]) + ".ttl";
 
 				File file = new File(fileName);
 				if (!file.exists()) {
@@ -371,10 +384,7 @@ public class SIBM {
 
 				BufferedWriter wr = new BufferedWriter(new OutputStreamWriter(
 						new FileOutputStream(file)), 1024 * 8);
-				// FileOutputStream outFile = new FileOutputStream(file);
-				// model.write(outFile, "Turtle");
 				model.write(wr, "Turtle");
-				// outFile.close();
 				wr.close();
 
 				int size = model.getGraph().size();
@@ -409,12 +419,12 @@ public class SIBM {
 
 					personCount_ += family.length;
 					max -= family.length;
-					for (NPerson p : family)
-						if (p != null && p.getProfile() != null)
-							synchronized (p) {
+
+					synchronized (family) {
+						for (NPerson p : family)
+							if (p.getProfile() != null) {
 								int index = Generator.genRandomInt(0,
 										pages.length - 1);
-
 								ShelterPoint randomPoint = pages[index];
 								Resource res = p.getResource();
 								if (res != null) {
@@ -422,10 +432,11 @@ public class SIBM {
 											randomPoint.getResource());
 									randomPoint.getResource().getModel()
 											.add(res.getModel());
-
 									// res.getModel().close();
 								}
 							}
+					}
+
 					family = null;
 				} catch (Exception er) {
 					er.printStackTrace();
@@ -491,18 +502,18 @@ public class SIBM {
 		}
 
 		private int getMaxSeat() {
-			if (pages == null || pages.length == 0)
-				return 0;
-
 			int max = 0;
+			if (pages == null || pages.length == 0)
+				return max;
+
 			for (ShelterPoint p : pages) {
 				if (p.getSeatingCapacity() >= 0)
 					max += p.getSeatingCapacity();
 				else
-					max += 500;
+					max += sDefaultAverageCapacity;
 			}
 
-			return max;
+			return Generator.genRandomInt(max / 2, max);
 		}
 	}
 

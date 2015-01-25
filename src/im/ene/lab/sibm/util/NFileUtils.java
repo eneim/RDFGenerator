@@ -3,6 +3,7 @@ package im.ene.lab.sibm.util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class NFileUtils {
 
@@ -10,6 +11,9 @@ public class NFileUtils {
 	// readme.start();
 	// readme.writeLine();
 	// readme.end();
+
+	public static final SimpleDateFormat fileDate = new SimpleDateFormat(
+			"yyyy_MM_dd_HH_mm_ss");
 
 	private final String dir = "sibm";
 
@@ -27,12 +31,13 @@ public class NFileUtils {
 		if (isStarted)
 			return;
 
+		isEnded = false;
 		isStarted = true;
 		if (!file.exists()) {
 			file.createNewFile();
 			fileWriter = new FileWriter(file, append);
 		} else
-			fileWriter = new FileWriter(file, false);
+			fileWriter = new FileWriter(file, append);
 	}
 
 	public void writeLine(String line) throws IOException {
@@ -44,6 +49,7 @@ public class NFileUtils {
 		if (isEnded)
 			return;
 
+		isStarted = false;
 		isEnded = true;
 		this.fileWriter.flush();
 		this.fileWriter.close();

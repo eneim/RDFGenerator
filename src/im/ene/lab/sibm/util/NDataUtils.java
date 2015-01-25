@@ -351,8 +351,15 @@ public class NDataUtils {
 			else
 				length += folderSize(file);
 		}
+
 		return length;
 	}
-	
+
+	public static double folderSizeMB(File dir) {
+		long sizeLong = folderSize(dir);
+
+		return (double) sizeLong / (1024 * 1024);
+	}
+
 	public static final int[] HOKKAIDO = { 1 };
 }
