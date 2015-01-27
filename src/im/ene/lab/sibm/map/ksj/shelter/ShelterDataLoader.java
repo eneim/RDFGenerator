@@ -1,5 +1,6 @@
 package im.ene.lab.sibm.map.ksj.shelter;
 
+import im.ene.lab.sibm.models.ShelterDataset;
 import im.ene.lab.sibm.models.ShelterPoint;
 
 import java.io.File;

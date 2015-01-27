@@ -1,9 +1,8 @@
 package im.ene.lab.sibm.map.ksj.shelter;
 
-import im.ene.lab.sibm.map.ksj.handler.ShelterDataHandler;
-import im.ene.lab.sibm.models.NPrefecture;
-import im.ene.lab.sibm.models.ShelterDataset;
-import im.ene.lab.sibm.models.ShelterPoint;
+import im.ene.lab.sibm.map.ksj.handler.SchoolDataHandler;
+import im.ene.lab.sibm.models.School;
+import im.ene.lab.sibm.models.SchoolDataSet;
 import im.ene.lab.sibm.util.GeneralFileFilter;
 import im.ene.lab.sibm.util.NDataUtils;
 
@@ -13,14 +12,35 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.IllegalSelectorException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class ShelterDataLoaderImpl implements ShelterDataLoader {
+public class SchoolDataLoaderImpl implements SchoolDataLoader {
+
+	private static final String[] KSJ_URL_FORMAT_LIST = {
+			null, // 0
+			null, // 1
+			"N02/N02-11/N02-11_GML.zip", // 2
+			// "N03/N03-11/N03-120331_%02d_GML.zip", // 3
+			"N03/N03-14/N03-140401_%02d_GML.zip",
+			// sample
+			// http://nlftp.mlit.go.jp/ksj/gml/data/N03/N03-14/N03-140401_13_GML.zip
+			null, // 4
+			null, // 5
+			null, // 6
+			"N07/N07-11/N07-11_%02d_GML.zip", // 7
+			null, // 8
+			null, // 9,
+			null, // 10,
+			"P11/P11-10/P11-10_%02d_GML.zip", // 11
+			null, null, null, null, null, null, null,
+			null, // 12 ~ 19
+			"P20/P20-12/P20-12_%02d_GML.zip", // 20
+			null, null, null, null, null, null, null, null,
+			"P29/P29-13/P29-13_%02d.zip" };
 
 	private static final String[] KSJ_TYPE_FORMAT = { null, // 0
 			null, // 1
@@ -42,138 +62,67 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 			null, // 17
 			null, // 18
 			null, // 19
-			"P20" // 20
-	};
-
-	private static final String[] KSJ_URL_FORMAT_LIST = { null, // 0
-			null, // 1
-			"N02/N02-11/N02-11_GML.zip", // 2
-			"N03/N03-11/N03-120331_%02d_GML.zip", // 3
-			null, // 4
-			null, // 5
-			null, // 6
-			"N07/N07-11/N07-11_%02d_GML.zip", // 7
-			null, // 8
-			null, // 9,
-			null, // 10,
-			"P11/P11-10/P11-10_%02d_GML.zip", // 11
-			null, null, null, null, null, null, null, null, // 12 ~ 19
-			"P20/P20-12/P20-12_%02d_GML.zip" // 20
-	};
-
-	/**
-	 * ファイルの文字コード
-	 */
-	private static final String CHARSET = "MS932";
+			"P20", // 20
+			null, null, null, null, null, null, null, null, // 21~28
+			"P29" };
 
 	/**
 	 * オリジナルファイルの保存フォルダ
 	 */
 	private final String orgDir;
 
-	/**
-	 * CSVファイルの保存ディレクトリ
-	 */
-	private String csvDir;
-
 	private final SAXParserFactory factory;
 
 	private static final String KSJ_URL_BASE = "http://nlftp.mlit.go.jp/ksj/gml/data/";
 
-	public ShelterDataLoaderImpl(String orgDir, String csvDir) {
+	public SchoolDataLoaderImpl(String orgDir) {
 		this.orgDir = orgDir;
-		this.csvDir = csvDir;
 		this.factory = SAXParserFactory.newInstance();
-		// System.out.println("org: " + new File(this.orgDir).getPath());
-		// System.out.println("csv: " + new File(this.csvDir).getPath());
 	}
 
 	@Override
-	public ShelterDataset[] getShelterDataset() {
-		ShelterDataset[] dataSets = new ShelterDataset[47];
+	public SchoolDataSet[] getSchoolDataSets() {
+		SchoolDataSet[] dataSets = new SchoolDataSet[47];
 		for (int i = 0; i < dataSets.length; i++) {
-			dataSets[i] = getShelterDataset(i);
+			dataSets[i] = getSchoolDataSet(i + 1);
 		}
 
 		return dataSets;
 	}
 
 	@Override
-	public ShelterDataset getShelterDataset(int prefCode) {
-		ShelterDataset dataSet = new ShelterDataset();
-		ShelterPoint[] points = readShelterGML(prefCode);
-		dataSet.setShelterPoints(points);
+	public SchoolDataSet getSchoolDataSet(int prefCode) {
+		SchoolDataSet dataSet = new SchoolDataSet();
+		School[] schools = readSchoolGML(prefCode);
+		dataSet.setSchools(schools);
 		return dataSet;
-	}
-
-	public ShelterDataset getShelterDataset(int prefCode, int maxPointCount) {
-		ShelterDataset dataSet = new ShelterDataset();
-		ShelterPoint[] points = readShelterGML(prefCode);
-
-		if (points.length > maxPointCount) {
-			points = Arrays.copyOf(points, maxPointCount);
-		}
-
-		dataSet.setShelterPoints(points);
-		return dataSet;
-	}
-
-	public NPrefecture getPrefectureData(int code) {
-		if (!NDataUtils.PREFS.containsKey(code))
-			return null;
-
-		ShelterPoint[] points = readShelterGML(code);
-		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
-		pref.setShelterPoints(points);
-		// pref.setShelterPoint(points[0]);
-		return pref;
-	}
-
-	public NPrefecture getPrefectureData(int code, int max) {
-		if (!NDataUtils.PREFS.containsKey(code))
-			return null;
-
-		ShelterPoint[] points = readShelterGML(code);
-
-		if (points.length >= max) {
-			points = Arrays.copyOf(points, max);
-		}
-
-		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
-		pref.setShelterPoints(points);
-		// pref.setShelterPoint(points[0]);
-		return pref;
 	}
 
 	@Override
-	public ShelterPoint[] readShelterGML(int code) {
+	public School[] readSchoolGML(int code) {
 		long t0 = System.nanoTime();
 
 		File file = new File(this.orgDir
 				+ File.separatorChar
 				+ String.format("%02d" + File.separatorChar
-						+ "P20-12_%02d.xml.gz", code, code));
-
-		getKsjFile(20, code);
+						+ "P29-13_%02d.xml.gz", code, code));
+		getKsjFile(29, code);
 
 		// extract files
-		ShelterPoint[] points = null;
+		School[] schools = null;
 		try {
 			SAXParser parser = this.factory.newSAXParser();
-			ShelterDataHandler handler = new ShelterDataHandler();
+			SchoolDataHandler handler = new SchoolDataHandler();
 			parser.parse(new GZIPInputStream(new FileInputStream(file)),
 					handler);
-			points = handler.getShelterPoints();
+			schools = handler.getSchools();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		System.out.printf("P20 %02d: %dms\n", code,
 				(System.nanoTime() - t0) / 1000000);
-		// System.out.println("Data retrieved: " + (points == null ? "null" :
-		// ""));
-
-		return points;
+		return schools;
 	}
 
 	@Override
@@ -184,10 +133,6 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 						+ KSJ_TYPE_FORMAT[type] + "-%02d.zip", code, code));
 	}
 
-	/**
-	 * download files from server in this implements, we are about to call
-	 * getKsjFile(20);
-	 */
 	@Override
 	public File[] getKsjFile(final int type, final int code) {
 		File zip = getFile(type, code);

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DOJParser {
+public class DataOfJapanParser {
 
 	public static final String DIR = "sibm";
 
