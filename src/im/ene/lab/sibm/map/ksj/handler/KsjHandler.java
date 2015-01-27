@@ -5,6 +5,8 @@ import im.ene.lab.sibm.map.ksj.BusRouteInfo;
 import im.ene.lab.sibm.map.ksj.BusStop;
 import im.ene.lab.sibm.map.ksj.CityArea;
 import im.ene.lab.sibm.map.ksj.Data;
+import im.ene.lab.sibm.map.ksj.GmlCurve;
+import im.ene.lab.sibm.map.ksj.GmlPolygons;
 import im.ene.lab.sibm.map.ksj.NPoint;
 import im.ene.lab.sibm.map.ksj.RailroadSectionData;
 import im.ene.lab.sibm.map.ksj.Station;
@@ -33,14 +35,14 @@ public class KsjHandler extends DefaultHandler {
 		this.linkTarget.add("gml:curveMember");
 		this.linkTarget.add("ksj:position");
 		this.linkTarget.add("ksj:loc");
-		// this.linkTarget.add("ksj:srs"); // ksj:Station -> ksj:RailroadSection
+		this.linkTarget.add("ksj:srs"); // ksj:Station -> ksj:RailroadSection
 		this.linkTarget.add("ksj:are");
 		this.linkTarget.add("ksj:brt");
 
-		// this.classMap.put("gml:Curve", GmlCurve.class);
+		this.classMap.put("gml:Curve", GmlCurve.class);
 		// this.classMap.put("gml:Point", GmlPoint.class);
 		this.classMap.put("gml:Point", NGeoPoint.class);
-		// this.classMap.put("gml:Surface", GmlPolygons.class);
+//		this.classMap.put("gml:Surface", GmlPolygons.class);
 		this.classMap.put("ksj:BusStop", BusStop.class);
 		this.classMap.put("ksj:busRouteInformation", BusRouteInfo.class);
 		this.classMap.put("ksj:BusRoute", BusRoute.class);
@@ -52,6 +54,8 @@ public class KsjHandler extends DefaultHandler {
 				HazardClassification.class);
 
 		this.charactersTarget.add("gml:posList");
+		this.charactersTarget.add("gml:segments");
+		this.charactersTarget.add("gml:LineStringSegment");
 		this.charactersTarget.add("ksj:opc");
 		this.charactersTarget.add("ksj:lin");
 		this.charactersTarget.add("ksj:stn");

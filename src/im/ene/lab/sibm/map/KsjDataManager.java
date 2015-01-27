@@ -159,7 +159,10 @@ public class KsjDataManager {
 	private static final String[] KSJ_URL_FORMAT_LIST = { null, // 0
 			null, // 1
 			"N02/N02-11/N02-11_GML.zip", // 2
-			"N03/N03-11/N03-120331_%02d_GML.zip", // 3
+			// "N03/N03-11/N03-120331_%02d_GML.zip", // 3
+			"N03/N03-14/N03-140401_%02d_GML.zip",
+			// sample
+			// http://nlftp.mlit.go.jp/ksj/gml/data/N03/N03-14/N03-140401_13_GML.zip
 			null, // 4
 			null, // 5
 			null, // 6
@@ -1269,6 +1272,7 @@ public class KsjDataManager {
 			ret = null;
 			e.printStackTrace();
 		}
+		
 		return ret;
 	}
 
@@ -1320,7 +1324,8 @@ public class KsjDataManager {
 		File file = new File(this.orgDir
 				+ File.separatorChar
 				+ String.format("%02d" + File.separatorChar
-						+ "N03-12_%02d_120331.xml.gz", code, code));
+						+ "N03-14_%02d_140401.xml.gz", code, code)); // new
+//						+ "N03-12_%02d_120331.xml.gz", code, code)); // old
 
 		this.getKsjFile(TYPE_ADMINISTRATIVEAREA, code);
 
