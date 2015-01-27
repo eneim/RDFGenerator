@@ -46,4 +46,7 @@ settings.gradle
 .gradle/
 gradle/
 .idea/
-.out/
+out/
+.gradle
+.idea
+out
