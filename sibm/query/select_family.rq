@@ -1,0 +1,23 @@
+PREFIX	geo:   <http://lab.ene.im/SIBM/property/geo#>
+PREFIX 	sibm:  <http://lab.ene.im/SIBM/property#>
+PREFIX 	xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX 	rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX 	rel:   <http://purl.org/vocab/relationship/>
+
+SELECT ?Principal ?Child ?Father
+
+WHERE {
+	?x 		sibm:stayAt   	<http://lab.ene.im/SIBM/thing/shelterpoint/S1> .
+	?x		sibm:profile	[sibm:firstName	?_Principal] .
+    ?x 		sibm:state		<http://lab.ene.im/SIBM/thing/label/Disease1> .
+    
+    OPTIONAL {
+		?x	rel:parentOf  	?y .
+		?y	sibm:profile	[sibm:firstName	?_Child]
+	}
+    
+    OPTIONAL {
+		?x	rel:childOf 	?z .
+		?z	sibm:profile	[sibm:firstName	?_Father]
+	}
+}
