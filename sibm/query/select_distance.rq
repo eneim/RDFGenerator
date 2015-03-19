@@ -1,0 +1,8 @@
+PREFIX spatial: <http://jena.apache.org/spatial#>
+PREFIX	geo:   <http://lab.ene.im/SIBM/property/geo#>
+PREFIX sibm:  <http://lab.ene.im/SIBM/property#>
+
+SELECT * WHERE {
+	?x geo:geopoint ?point .
+	?point spatial:nearby (43.123179 142.112745 100.0 'miles') ;
+}

@@ -1,5 +1,6 @@
 package im.ene.lab.sibm.models;
 
+import im.ene.lab.sibm.models.School.SchoolType;
 import im.ene.lab.sibm.util.NDataUtils;
 
 import javax.annotation.Generated;
@@ -7,6 +8,9 @@ import javax.annotation.Generated;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.OWL2;
 import com.hp.hpl.jena.vocabulary.RDF;
 
 @Generated("org.jsonschema2pojo")
@@ -27,20 +31,42 @@ public class NPerson {
 		return ID;
 	}
 
+	private SchoolType schoolType;
+
+	public SchoolType getSchoolType() {
+		return schoolType;
+	}
+
+	public void setSchoolType(SchoolType schoolType) {
+		this.schoolType = schoolType;
+	}
+
 	public void setID(String iD) {
 		ID = iD;
 	}
 
-	private NStatus status;
+	// private NStatus status;
 
-	public NStatus getStatus() {
-		return status;
+	private NLabel disease;
+
+	// public NStatus getStatus() {
+	// return status;
+	// }
+	//
+	// public void setStatus(NStatus status) {
+	// this.status = status;
+	// this.resource.addProperty(NProperty.status, status.getResource());
+	// this.resource.getModel().add(status.getResource().getModel());
+	// }
+
+	public NLabel getDisease() {
+		return disease;
 	}
 
-	public void setStatus(NStatus status) {
-		this.status = status;
-		this.resource.addProperty(NProperty.status, status.getResource());
-		this.resource.getModel().add(status.getResource().getModel());
+	public void setDisease(NLabel disease) {
+		this.disease = disease;
+		this.resource.addProperty(NProperty.label, disease.getResource());
+		this.resource.getModel().add(disease.getResource().getModel());
 	}
 
 	private NUserType type;
@@ -67,8 +93,10 @@ public class NPerson {
 		this.father = father;
 		if (father != null) {
 			Resource rf = father.getResource();
-			if (rf != null)
-				this.resource.addProperty(NProperty.hasFather, rf);
+			if (rf != null) {
+				// this.resource.addProperty(NProperty.hasFather, rf);
+				rf.addProperty(NProperty.parentOf, this.resource);
+			}
 		}
 	}
 
@@ -80,8 +108,10 @@ public class NPerson {
 		this.mother = mother;
 		if (mother != null) {
 			Resource rf = mother.getResource();
-			if (rf != null)
-				this.resource.addProperty(NProperty.hasMother, rf);
+			if (rf != null) {
+				// this.resource.addProperty(NProperty.hasMother, rf);
+				rf.addProperty(NProperty.parentOf, this.resource);
+			}
 		}
 	}
 
@@ -93,8 +123,10 @@ public class NPerson {
 		this.spouse = spouse;
 		if (spouse != null) {
 			Resource rf = spouse.getResource();
-			if (rf != null)
-				this.resource.addProperty(NProperty.hasSpouse, rf);
+			if (rf != null) {
+				// this.resource.addProperty(NProperty.hasSpouse, rf);
+				this.resource.addProperty(NProperty.spouseOf, rf);
+			}
 		}
 	}
 
@@ -109,9 +141,18 @@ public class NPerson {
 			for (NPerson child : children)
 				if (child.getResource() != null) {
 					rf = child.getResource();
-					if (rf != null)
-						this.resource.addProperty(NProperty.hasChild, rf);
+					if (rf != null) {
+						rf.addProperty(NProperty.childOf, this.resource);
+						// this.resource.addProperty(NProperty.hasChild, rf);
+					}
 				}
+		}
+	}
+
+	public void setSibling(NPerson person) {
+		Resource rf = this.getResource();
+		if (rf != null) {
+			rf.addProperty(NProperty.siblingOf, person.getResource());
 		}
 	}
 
@@ -137,20 +178,20 @@ public class NPerson {
 			return;
 		else {
 			Resource res = ModelFactory.createDefaultModel().createResource();
-			res.addLiteral(NProperty.firstName, profile.getFirstName())
-					.addLiteral(NProperty.surname, profile.getSurname())
-					.addLiteral(NProperty.gender, profile.getGender())
-					.addLiteral(NProperty.birthday, profile.getBirthday())
+			res.addLiteral(FOAF.givenname, profile.getFirstName())
+					.addLiteral(FOAF.family_name, profile.getSurname())
+					.addLiteral(FOAF.gender, profile.getGender())
+					.addLiteral(FOAF.birthday, profile.getBirthday())
 					.addLiteral(
 							NProperty.age,
 							model.createTypedLiteral(Integer.valueOf(profile
 									.getAge())))
 					// .addLiteral(NProperty.address, profile.getAddress())
 					// .addLiteral(NProperty.zipCode, profile.getZipCode())
-					.addLiteral(NProperty.email, profile.getEmail());
+					.addLiteral(FOAF.mbox, profile.getEmail());
 
 			if (profile.getPhone() != null)
-				res.addLiteral(NProperty.phone, profile.getPhone());
+				res.addLiteral(FOAF.phone, profile.getPhone());
 
 			this.resource.addProperty(NProperty.profile, res);
 			this.resource.getModel().add(res.getModel());

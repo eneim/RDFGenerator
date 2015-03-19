@@ -1,0 +1,12 @@
+PREFIX	geo:   <http://lab.ene.im/SIBM/property/geo#> 
+PREFIX 	sibm:  <http://lab.ene.im/SIBM/property#>
+PREFIX 	xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX 	rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+#SELECT (count(*) AS ?count)
+
+SELECT ?x
+WHERE {
+	?x sibm:profile ?y .
+	?y sibm:gender     "Male"^^xsd:string ;
+}

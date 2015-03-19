@@ -8,6 +8,7 @@ import java.io.File;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.VCARD;
 
 public class ShelterPoint implements Data {
 
@@ -193,7 +194,7 @@ public class ShelterPoint implements Data {
 	private void setStorage() {
 		this.storageRice = Generator.genRandomInt(this.seatingCapacity / 2,
 				this.seatingCapacity * 4);
-		this.resource.addLiteral(NProperty.storageRice,
+		this.resource.addLiteral(NProperty.storageFood,
 				model.createTypedLiteral(this.storageRice));
 		this.storageWater = Generator.genRandomInt(this.seatingCapacity / 10,
 				this.seatingCapacity / 2);

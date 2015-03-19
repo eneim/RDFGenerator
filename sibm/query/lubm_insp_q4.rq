@@ -1,0 +1,14 @@
+PREFIX	geo:   <http://lab.ene.im/SIBM/property/geo#> 
+PREFIX 	sibm:  <http://lab.ene.im/SIBM/property#>
+PREFIX 	xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX 	rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?x ?y1 ?y2 ?y3
+WHERE { 
+	?x	rdf:type		<http://lab.ene.im/SIBM/thing/usertype/assistant> .
+	?x	sibm:stayAt   	<http://lab.ene.im/SIBM/thing/shelterpoint/S1> .		
+	?x 	sibm:profile   	?y .
+	?y 	sibm:firstName	?y1 .
+	?y	sibm:age		?y2 .
+	?y	sibm:email		?y3 .	
+}

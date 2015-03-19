@@ -4,6 +4,8 @@ import im.ene.lab.sibm.util.NDataUtils;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.RDFS;
 
 public class NUserType {
 
@@ -24,6 +26,8 @@ public class NUserType {
 		resource = model.createResource(BASE_PERSON + name);
 		resource.addLiteral(NProperty.userType, name).addLiteral(
 				NProperty.accessLevel, model.createTypedLiteral(level));
+		// resource.addLiteral(RDFS.subClassOf,
+		// model.createTypedLiteral(FOAF.Person.asLiteral()));
 
 	}
 
