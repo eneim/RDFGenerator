@@ -3,12 +3,15 @@ package im.ene.lab.sibm.models;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.vocabulary.VCARD;
 
 public class NProperty {
 
 	protected static final String sibm = "http://lab.ene.im/SIBM/property#";
 
 	protected static final String sibm_geo = "http://lab.ene.im/SIBM/property/geo#";
+
+	protected static final String rel = "http://purl.org/vocab/relationship/";
 
 	private static Model m = ModelFactory.createDefaultModel();
 
@@ -27,7 +30,7 @@ public class NProperty {
 	public static final Property other;
 	public static final Property notSpecified;
 
-	public static final Property NAME = m.createProperty(sibm + "name");
+	public static final Property NAME = VCARD.NAME;
 	public static final Property administrativeAreaCode = m.createProperty(sibm
 			+ "administrativeAreaCode");
 	public static final Property address = m.createProperty(sibm + "address");
@@ -42,8 +45,8 @@ public class NProperty {
 	public static final Property hazardClassification = m.createProperty(sibm
 			+ "hazardClassification");
 
-	public static final Property storageRice = m.createProperty(sibm
-			+ "storageRice");
+	public static final Property storageFood = m.createProperty(sibm
+			+ "storageFood");
 	public static final Property storageWater = m.createProperty(sibm
 			+ "storageWater");
 	public static final Property storageMedicine = m.createProperty(sibm
@@ -100,6 +103,8 @@ public class NProperty {
 		statusLevel = m.createProperty(sibm + "statusLevel");
 	}
 
+	public static final Property siblingOf = m.createProperty(rel + "siblingOf");;
+	
 	public static final Property hasFather = m.createProperty(sibm
 			+ "hasFather");
 	public static final Property hasMother = m.createProperty(sibm
@@ -108,4 +113,16 @@ public class NProperty {
 			+ "hasSpouse");
 	public static final Property hasChild = m.createProperty(sibm + "hasChild");
 
+	public static final Property parentOf = m.createProperty(rel + "parentOf");
+
+	public static final Property childOf = m.createProperty(rel + "childOf");
+
+	public static final Property spouseOf = m.createProperty(rel + "spouseOf");
+
+	public static final Property labelName = m.createProperty(sibm
+			+ "stateName");
+
+	public static final Property label = m.createProperty(sibm + "state");
+
+	public static final Property studyAt = m.createProperty(sibm + "studyAt");
 }

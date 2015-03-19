@@ -75,4 +75,8 @@ public class NGeoPoint implements Data {
 			this.resource = model.createResource(BASE_GEOPOINT + name);
 	}
 
+	@Override
+	public String toString() {
+		return this.lat + "," + this.lng;
+	}
 }

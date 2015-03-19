@@ -27,6 +27,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.sparql.vocabulary.FOAF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+import com.hp.hpl.jena.vocabulary.VCARD;
 import com.hp.hpl.jena.vocabulary.XSD;
 
 public class NDataUtils {
@@ -37,6 +40,8 @@ public class NDataUtils {
 	protected static final String sibm = "http://lab.ene.im/SIBM/property#";
 
 	protected static final String sibm_geo = "http://lab.ene.im/SIBM/property/geo#";
+	
+	protected static final String rel = "http://purl.org/vocab/relationship/";
 
 	public static final Model MODEL = ModelFactory.createDefaultModel();
 
@@ -46,6 +51,7 @@ public class NDataUtils {
 		MODEL.setNsPrefix("sibm", sibm);
 		MODEL.setNsPrefix("geo", sibm_geo);
 		MODEL.setNsPrefix("xsd", XSD.getURI());
+		MODEL.setNsPrefix("rel", rel);
 
 		BufferedReader br = null;
 		try {
@@ -82,6 +88,10 @@ public class NDataUtils {
 		model.setNsPrefix("sibm", sibm);
 		model.setNsPrefix("geo", sibm_geo);
 		model.setNsPrefix("xsd", XSD.getURI());
+		model.setNsPrefix("rel", rel);
+		model.setNsPrefix("foaf", FOAF.getURI());
+		model.setNsPrefix("vcard", VCARD.getURI());
+		model.setNsPrefix("rdfs", RDFS.getURI());
 	}
 
 	public static File gzip(File file) {

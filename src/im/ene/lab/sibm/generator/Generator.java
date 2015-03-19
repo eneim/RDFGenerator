@@ -1,9 +1,10 @@
 package im.ene.lab.sibm.generator;
 
+import im.ene.lab.sibm.models.NLabel;
 import im.ene.lab.sibm.models.NPerson;
-import im.ene.lab.sibm.models.NStatus;
 import im.ene.lab.sibm.models.NUserType;
 import im.ene.lab.sibm.models.Profile;
+import im.ene.lab.sibm.models.School.SchoolType;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -14,11 +15,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 public class Generator {
 
-	private static int DEFAULT_MIN_AGE = 3;
-
-	private static int DEFAULT_MAX_AGE = 97;
-
-	private static String[] GENDER = { "Male", "Female" };
+//	private static int DEFAULT_MIN_AGE = 3;
+//
+//	// TODO use Japanese population average lifespan information;
+//	private static int DEFAULT_MAX_AGE = 97;
+//
+//	private static String[] GENDER = { "Male", "Female" };
 
 	public static void main(String[] args) {
 
@@ -72,6 +74,7 @@ public class Generator {
 		profile.setSurname(genLastName());
 		profile.setEmail(genEmail(profile.getFirstName(), profile.getSurname()));
 		profile.setGender(genGender(false));
+
 		if (age >= 12)
 			profile.setPhone(genPhone("+81"));
 
@@ -82,23 +85,48 @@ public class Generator {
 		person.setProfile(profile);
 		person.setType(genType(age));
 
+		SchoolType sType;
+		if ((sType = genSchoolType(age)) != null) {
+			person.setSchoolType(sType);
+		}
+		
 		// set status
 		if (NUserType.ASSISTANT.equals(person.getType())
 				|| NUserType.VOLUNTEER.equals(person.getType())) {
-			person.setStatus(NStatus.NORMAL);
+
 		} else {
 			double ran = Math.random();
-			if (ran >= 0.5)
-				person.setStatus(NStatus.NORMAL);
-			else if (ran >= 0.2)
-				person.setStatus(NStatus.MINOR);
-			else if (ran >= 0.025)
-				person.setStatus(NStatus.MODERATE);
-			else
-				person.setStatus(NStatus.SERIOUS);
+			if (ran >= 0.5) {
+				person.setDisease(NLabel.DISEASES[genRandomInt(0,
+						NLabel.DISEASES.length - 1)]);
+			}
 		}
 
 		return person;
+	}
+
+	private static SchoolType genSchoolType(int age) {
+		double ran = Math.random();
+		if (ran > 0.98)
+			return SchoolType.OTH;
+
+		if (age < 5)
+			return SchoolType.OTH;
+		else if (age < 12)
+			return SchoolType.ELE;
+		else if (age < 15)
+			return SchoolType.MID;
+		else if (age < 18)
+			return SchoolType.HIGH;
+		else if (age < 22) {
+			double ran_ = Math.random();
+			if (ran_ > 0.75)
+				return SchoolType.COL;
+			else
+				return SchoolType.UNI;
+		} else
+			return null;
+
 	}
 
 	private static NUserType genType(int age) {
@@ -125,7 +153,7 @@ public class Generator {
 	}
 
 	public static NPerson genPerson() {
-		int age = genRandomInt(DEFAULT_MIN_AGE, DEFAULT_MAX_AGE);
+		int age = genRandomInt(Constants.DEFAULT_MIN_AGE, Constants.DEFAULT_MAX_AGE);
 		return genPerson(age);
 	}
 
@@ -141,9 +169,14 @@ public class Generator {
 	}
 
 	private static String genGender(boolean isMale) {
-		if (!isMale)
-			return GENDER[genRandomInt(0, 1)];
-		return "Male";
+		if (isMale)
+			return "Male";
+		
+		double ran = Math.random();
+		if (ran > Constants.MAN_RATE) {
+			return Constants.GENDER[1];
+		} else
+			return Constants.GENDER[0];
 	}
 
 	private static int genMonth() {
@@ -295,16 +328,23 @@ public class Generator {
 				for (int i = 0; i < childAge.length; i++) {
 					children[i] = genPerson(childAge[i], fName);
 				}
+				
+				for (int i = 0; i < children.length - 1; i++) {
+					for (int j = i + 1; j < children.length; j++) {
+						children[i].setSibling(children[j]);
+					}
+				}
+				
 			} else {
 				hasChild = false;
 				children = new NPerson[0];
 			}
 
 			father = genPerson(fatherAge, fName);
-			father.getProfile().setGender(GENDER[0]);
+			father.getProfile().setGender(Constants.GENDER[0]);
 
 			mother = genPerson(motherAge, fName);
-			mother.getProfile().setGender(GENDER[1]);
+			mother.getProfile().setGender(Constants.GENDER[1]);
 
 			father.setSpouse(mother);
 			mother.setSpouse(father);
@@ -333,17 +373,17 @@ public class Generator {
 						grandFatherAge,
 						fName,
 						(Math.random() > Math.abs((1 - (float) grandFatherAge
-								/ DEFAULT_MAX_AGE))));
+								/ Constants.DEFAULT_MAX_AGE))));
 				if (grandFather.getProfile() != null)
-					grandFather.getProfile().setGender(GENDER[0]);
+					grandFather.getProfile().setGender(Constants.GENDER[0]);
 
 				grandMother = genPersion(
 						grandMotherAge,
 						fName,
 						(Math.random() > Math.abs((1 - (float) grandMotherAge
-								/ DEFAULT_MAX_AGE))));
+								/ Constants.DEFAULT_MAX_AGE))));
 				if (grandMother.getProfile() != null)
-					grandMother.getProfile().setGender(GENDER[1]);
+					grandMother.getProfile().setGender(Constants.GENDER[1]);
 
 				grandFather.setSpouse(grandMother);
 				grandMother.setSpouse(grandFather);

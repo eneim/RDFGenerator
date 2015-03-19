@@ -2,6 +2,7 @@ package im.ene.lab.sibm.models;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import im.ene.lab.sibm.map.ksj.Data;
 import im.ene.lab.sibm.util.NDataUtils;
@@ -13,6 +14,14 @@ public class School implements Data {
 	private Model model = NDataUtils.createModel();
 
 	private Resource resource;
+
+	public Resource getResource() {
+		return resource;
+	}
+
+	public void setResource(Resource resource) {
+		this.resource = resource;
+	}
 
 	private NGeoPoint geoPoint;
 
@@ -74,6 +83,7 @@ public class School implements Data {
 				this.name = string;
 				setType(string);
 				this.resource.addLiteral(NProperty.NAME, string);
+				this.resource.addLiteral(RDF.type, getType().getType());
 			} else if ("ksj:address".equals(tag)) {
 				this.address = string;
 				this.resource.addLiteral(NProperty.address, string);

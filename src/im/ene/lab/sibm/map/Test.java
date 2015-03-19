@@ -13,9 +13,11 @@ import java.io.InputStream;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.geojson.feature.FeatureJSON;
+import org.geotools.geojson.geom.GeometryJSON;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.github.filosganga.geogson.gson.GeometryAdapterFactory;
+import com.github.filosganga.geogson.model.Geometry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -30,17 +32,18 @@ public class Test {
 
 		// InputStream in = new FileInputStream(new File("sibm/japan.geojson"));
 		//
-		// Gson gson = new GsonBuilder()
-		// .registerTypeAdapterFactory(new GeometryAdapterFactory())
-		// .create();
+		// // Gson gson = new GsonBuilder().registerTypeAdapterFactory(
+		// // new GeometryAdapterFactory()).create();
 		//
 		// FeatureJSON fj = new FeatureJSON();
-		// SimpleFeatureCollection sm = (SimpleFeatureCollection)
-		// fj.readFeatureCollection(in);
+		// SimpleFeatureCollection sm = (SimpleFeatureCollection) fj
+		// .readFeatureCollection(in);
 		// SimpleFeatureIterator smi = sm.features();
 		//
 		// while (smi.hasNext()) {
 		// SimpleFeature f = smi.next();
+		//
+		// GeometryJSON geo = new GeometryJSON();
 		// System.out.println(f.getAttribute("nam_ja"));
 		// }
 
@@ -48,7 +51,7 @@ public class Test {
 		SchoolDataSet setTokyo = loader.getSchoolDataSet(13);
 		for (School sh : setTokyo.getSchools()) {
 			if (sh.getType() == SchoolType.OTH)
-				System.out.println(sh.getName());
+				System.out.println(sh.getGeoPoint().toString());
 		}
 
 		// mgr.getAreaDataset();
