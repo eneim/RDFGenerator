@@ -172,7 +172,9 @@ public class KsjDataManager {
 			null, // 10,
 			"P11/P11-10/P11-10_%02d_GML.zip", // 11
 			null, null, null, null, null, null, null, null, // 12 ~ 19
-			"P20/P20-12/P20-12_%02d_GML.zip" // 20
+			"P20/P20-12/P20-12_%02d_GML.zip", // 20
+			null, null, null, null, null, null, null, null,
+			"P29/P29-13/P29-13_%02.zip"
 	};
 
 	private static final String[] KSJ_TYPE_FORMAT = { null, // 0
@@ -195,7 +197,9 @@ public class KsjDataManager {
 			null, // 17
 			null, // 18
 			null, // 19
-			"P20" // 20
+			"P20", // 20
+			null, null, null, null, null, null, null, null, // 21~28
+			"P29"
 	};
 
 	private static final String KSJ_URL_BASE = "http://nlftp.mlit.go.jp/ksj/gml/data/";

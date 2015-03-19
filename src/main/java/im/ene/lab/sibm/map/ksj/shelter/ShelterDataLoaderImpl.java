@@ -1,7 +1,9 @@
 package im.ene.lab.sibm.map.ksj.shelter;
 
 import im.ene.lab.sibm.map.ksj.handler.ShelterDataHandler;
+import im.ene.lab.sibm.models.NPoint;
 import im.ene.lab.sibm.models.NPrefecture;
+import im.ene.lab.sibm.models.ShelterDataset;
 import im.ene.lab.sibm.models.ShelterPoint;
 import im.ene.lab.sibm.util.GeneralFileFilter;
 import im.ene.lab.sibm.util.NDataUtils;
@@ -12,7 +14,11 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.IllegalSelectorException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -128,19 +134,84 @@ public class ShelterDataLoaderImpl implements ShelterDataLoader {
 		return pref;
 	}
 
+	public NPrefecture getPrefectureData(int code, double range) {
+		if (!NDataUtils.PREFS.containsKey(code))
+			return null;
+
+		ShelterPoint[] points = readShelterGML(code);
+
+		double x = 0, y = 0;
+
+		for (ShelterPoint point : points) {
+			x += point.getGeoPoint().getLat();
+			y += point.getGeoPoint().getLng();
+		}
+
+		final NPoint center = new NPoint(x / points.length, y / points.length);
+
+		List<ShelterPoint> sPoints = Arrays.asList(points);
+
+		Collections.sort(sPoints, new Comparator<ShelterPoint>() {
+
+			@Override
+			public int compare(ShelterPoint o1, ShelterPoint o2) {
+				double dis = NPoint.distance(o1.getGeoPoint(), center)
+						- NPoint.distance(o2.getGeoPoint(), center);
+				return dis <= 0 ? -1 : 1;
+			}
+		});
+
+		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
+		pref.setCenter(center);
+		ArrayList<ShelterPoint> prefPoinst = new ArrayList<ShelterPoint>();
+		for (int i = 0; i < sPoints.size(); i++) {
+			if (NPoint.distance(sPoints.get(i).getGeoPoint(), center) <= range)
+				prefPoinst.add(sPoints.get(i));
+		}
+
+		pref.setShelterPoints(prefPoinst);
+
+		return pref;
+	}
+	
+	@Deprecated
 	public NPrefecture getPrefectureData(int code, int max) {
 		if (!NDataUtils.PREFS.containsKey(code))
 			return null;
 
 		ShelterPoint[] points = readShelterGML(code);
 
-		if (points.length >= max) {
-			points = Arrays.copyOf(points, max);
+		double x = 0, y = 0;
+
+		for (ShelterPoint point : points) {
+			x += point.getGeoPoint().getLat();
+			y += point.getGeoPoint().getLng();
 		}
 
+		final NPoint center = new NPoint(x / points.length, y / points.length);
+
+		List<ShelterPoint> sPoints = Arrays.asList(points);
+
+		Collections.sort(sPoints, new Comparator<ShelterPoint>() {
+
+			@Override
+			public int compare(ShelterPoint o1, ShelterPoint o2) {
+				double dis = NPoint.distance(o1.getGeoPoint(), center)
+						- NPoint.distance(o2.getGeoPoint(), center);
+				return dis <= 0 ? -1 : 1;
+			}
+		});
+
 		NPrefecture pref = new NPrefecture(NDataUtils.PREFS.get(code), code);
-		pref.setShelterPoints(points);
-		// pref.setShelterPoint(points[0]);
+		pref.setCenter(center);
+		int len = sPoints.size() > max ? max : sPoints.size();
+		ArrayList<ShelterPoint> prefPoinst = new ArrayList<ShelterPoint>(len);
+		for (int i = 0; i < len; i++) {
+			prefPoinst.add(sPoints.get(i));
+		}
+
+		pref.setShelterPoints(prefPoinst);
+
 		return pref;
 	}
 

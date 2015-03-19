@@ -1,0 +1,403 @@
+[
+  {
+    "id": 0,
+    "nameJp": "北海道",
+    "nameEn": "Hokkaido",
+    "prefectures": [
+      {
+        "id": 1,
+        "nameJp": "北海道",
+        "nameEn": "Hokkaido",
+        "region": 0,
+        "shelterCount": 9047
+      }
+    ],
+    "shelterCount": 9047
+  },
+  {
+    "id": 1,
+    "nameJp": "東北",
+    "nameEn": "Tohoku",
+    "prefectures": [
+      {
+        "id": 2,
+        "nameJp": "青森",
+        "nameEn": "Aomori",
+        "region": 1,
+        "shelterCount": 2351
+      },
+      {
+        "id": 3,
+        "nameJp": "岩手",
+        "nameEn": "Iwate",
+        "region": 1,
+        "shelterCount": 2483
+      },
+      {
+        "id": 4,
+        "nameJp": "宮城",
+        "nameEn": "Miyagi",
+        "region": 1,
+        "shelterCount": 1974
+      },
+      {
+        "id": 5,
+        "nameJp": "秋田",
+        "nameEn": "Akita",
+        "region": 1,
+        "shelterCount": 2772
+      },
+      {
+        "id": 6,
+        "nameJp": "山形",
+        "nameEn": "Yamagata",
+        "region": 1,
+        "shelterCount": 2140
+      },
+      {
+        "id": 7,
+        "nameJp": "福島",
+        "nameEn": "Fukushima",
+        "region": 1,
+        "shelterCount": 3201
+      }
+    ],
+    "shelterCount": 14921
+  },
+  {
+    "id": 2,
+    "nameJp": "関東",
+    "nameEn": "Kanto",
+    "prefectures": [
+      {
+        "id": 8,
+        "nameJp": "茨城",
+        "nameEn": "Ibaraki",
+        "region": 2,
+        "shelterCount": 2326
+      },
+      {
+        "id": 9,
+        "nameJp": "栃木",
+        "nameEn": "Tochigi",
+        "region": 2,
+        "shelterCount": 1187
+      },
+      {
+        "id": 10,
+        "nameJp": "群馬",
+        "nameEn": "Gunma",
+        "region": 2,
+        "shelterCount": 1749
+      },
+      {
+        "id": 11,
+        "nameJp": "埼玉",
+        "nameEn": "Saitama",
+        "region": 2,
+        "shelterCount": 3691
+      },
+      {
+        "id": 12,
+        "nameJp": "千葉",
+        "nameEn": "Chiba",
+        "region": 2,
+        "shelterCount": 3471
+      },
+      {
+        "id": 13,
+        "nameJp": "東京",
+        "nameEn": "Tokyo",
+        "region": 2,
+        "shelterCount": 3919
+      },
+      {
+        "id": 14,
+        "nameJp": "神奈川",
+        "nameEn": "Kanagawa",
+        "region": 2,
+        "shelterCount": 2111
+      }
+    ],
+    "shelterCount": 18454
+  },
+  {
+    "id": 3,
+    "nameJp": "中部",
+    "nameEn": "Chubu",
+    "prefectures": [
+      {
+        "id": 15,
+        "nameJp": "新潟",
+        "nameEn": "Niigata",
+        "region": 3,
+        "shelterCount": 4027
+      },
+      {
+        "id": 16,
+        "nameJp": "富山",
+        "nameEn": "Toyama",
+        "region": 3,
+        "shelterCount": 1590
+      },
+      {
+        "id": 17,
+        "nameJp": "石川",
+        "nameEn": "Ishikawa",
+        "region": 3,
+        "shelterCount": 1599
+      },
+      {
+        "id": 18,
+        "nameJp": "福井",
+        "nameEn": "Fukui",
+        "region": 3,
+        "shelterCount": 2232
+      },
+      {
+        "id": 19,
+        "nameJp": "山梨",
+        "nameEn": "Yamanashi",
+        "region": 3,
+        "shelterCount": 1451
+      },
+      {
+        "id": 20,
+        "nameJp": "長野",
+        "nameEn": "Nagano",
+        "region": 3,
+        "shelterCount": 4489
+      },
+      {
+        "id": 21,
+        "nameJp": "岐阜",
+        "nameEn": "Gifu",
+        "region": 3,
+        "shelterCount": 3963
+      },
+      {
+        "id": 22,
+        "nameJp": "静岡",
+        "nameEn": "Shizuoka",
+        "region": 3,
+        "shelterCount": 2212
+      },
+      {
+        "id": 23,
+        "nameJp": "愛知",
+        "nameEn": "Aichi",
+        "region": 3,
+        "shelterCount": 5035
+      }
+    ],
+    "shelterCount": 26598
+  },
+  {
+    "id": 4,
+    "nameJp": "近畿",
+    "nameEn": "Kinki",
+    "prefectures": [
+      {
+        "id": 24,
+        "nameJp": "三重",
+        "nameEn": "Mie",
+        "region": 4,
+        "shelterCount": 3692
+      },
+      {
+        "id": 25,
+        "nameJp": "滋賀",
+        "nameEn": "Shiga",
+        "region": 4,
+        "shelterCount": 1640
+      },
+      {
+        "id": 26,
+        "nameJp": "京都",
+        "nameEn": "Kyoto",
+        "region": 4,
+        "shelterCount": 2542
+      },
+      {
+        "id": 27,
+        "nameJp": "大阪",
+        "nameEn": "Osaka",
+        "region": 4,
+        "shelterCount": 4300
+      },
+      {
+        "id": 28,
+        "nameJp": "兵庫",
+        "nameEn": "Hyogo",
+        "region": 4,
+        "shelterCount": 4172
+      },
+      {
+        "id": 29,
+        "nameJp": "奈良",
+        "nameEn": "Nara",
+        "region": 4,
+        "shelterCount": 1500
+      },
+      {
+        "id": 30,
+        "nameJp": "和歌山",
+        "nameEn": "Wakayama",
+        "region": 4,
+        "shelterCount": 2063
+      }
+    ],
+    "shelterCount": 19909
+  },
+  {
+    "id": 5,
+    "nameJp": "中国",
+    "nameEn": "Chugoku",
+    "prefectures": [
+      {
+        "id": 31,
+        "nameJp": "鳥取",
+        "nameEn": "Tottori",
+        "region": 5,
+        "shelterCount": 1766
+      },
+      {
+        "id": 32,
+        "nameJp": "島根",
+        "nameEn": "Shimane",
+        "region": 5,
+        "shelterCount": 2570
+      },
+      {
+        "id": 33,
+        "nameJp": "岡山",
+        "nameEn": "Okayama",
+        "region": 5,
+        "shelterCount": 2854
+      },
+      {
+        "id": 34,
+        "nameJp": "広島",
+        "nameEn": "Hiroshima",
+        "region": 5,
+        "shelterCount": 2717
+      },
+      {
+        "id": 35,
+        "nameJp": "山口",
+        "nameEn": "Yamaguchi",
+        "region": 5,
+        "shelterCount": 1945
+      }
+    ],
+    "shelterCount": 11852
+  },
+  {
+    "id": 6,
+    "nameJp": "四国",
+    "nameEn": "Shikoku",
+    "prefectures": [
+      {
+        "id": 36,
+        "nameJp": "徳島",
+        "nameEn": "Tokushima",
+        "region": 6,
+        "shelterCount": 1766
+      },
+      {
+        "id": 37,
+        "nameJp": "香川",
+        "nameEn": "Kagawa",
+        "region": 6,
+        "shelterCount": 1022
+      },
+      {
+        "id": 38,
+        "nameJp": "愛媛",
+        "nameEn": "Ehime",
+        "region": 6,
+        "shelterCount": 3033
+      },
+      {
+        "id": 39,
+        "nameJp": "高知",
+        "nameEn": "Kochi",
+        "region": 6,
+        "shelterCount": 1660
+      }
+    ],
+    "shelterCount": 7481
+  },
+  {
+    "id": 7,
+    "nameJp": "九州",
+    "nameEn": "Kyushu",
+    "prefectures": [
+      {
+        "id": 40,
+        "nameJp": "福岡",
+        "nameEn": "Fukuoka",
+        "region": 7,
+        "shelterCount": 3378
+      },
+      {
+        "id": 41,
+        "nameJp": "佐賀",
+        "nameEn": "Saga",
+        "region": 7,
+        "shelterCount": 825
+      },
+      {
+        "id": 42,
+        "nameJp": "長崎",
+        "nameEn": "Nagasaki",
+        "region": 7,
+        "shelterCount": 3082
+      },
+      {
+        "id": 43,
+        "nameJp": "熊本",
+        "nameEn": "Kumamoto",
+        "region": 7,
+        "shelterCount": 1969
+      },
+      {
+        "id": 44,
+        "nameJp": "大分",
+        "nameEn": "Oita",
+        "region": 7,
+        "shelterCount": 2339
+      },
+      {
+        "id": 45,
+        "nameJp": "宮崎",
+        "nameEn": "Miyazaki",
+        "region": 7,
+        "shelterCount": 2090
+      },
+      {
+        "id": 46,
+        "nameJp": "鹿児島",
+        "nameEn": "Kagoshima",
+        "region": 7,
+        "shelterCount": 2123
+      }
+    ],
+    "shelterCount": 15806
+  },
+  {
+    "id": 8,
+    "nameJp": "沖縄",
+    "nameEn": "Okinawa",
+    "prefectures": [
+      {
+        "id": 47,
+        "nameJp": "沖縄",
+        "nameEn": "Okinawa",
+        "region": 8,
+        "shelterCount": 1860
+      }
+    ],
+    "shelterCount": 1860
+  }
+]

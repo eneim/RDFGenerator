@@ -12,6 +12,7 @@ import im.ene.lab.sibm.map.ksj.RailroadSectionData;
 import im.ene.lab.sibm.map.ksj.Station;
 import im.ene.lab.sibm.models.HazardClassification;
 import im.ene.lab.sibm.models.NGeoPoint;
+import im.ene.lab.sibm.models.School;
 import im.ene.lab.sibm.models.ShelterPoint;
 import im.ene.lab.sibm.util.FixedPoint;
 
@@ -52,6 +53,7 @@ public class KsjHandler extends DefaultHandler {
 		this.classMap.put("ksj:EvacuationFacilities", ShelterPoint.class);
 		this.classMap.put("ksj:hazardClassification",
 				HazardClassification.class);
+		this.classMap.put("ksj:School", School.class);
 
 		this.charactersTarget.add("gml:posList");
 		this.charactersTarget.add("gml:segments");
@@ -80,6 +82,7 @@ public class KsjHandler extends DefaultHandler {
 		this.charactersTarget.add("ksj:other");
 		this.charactersTarget.add("ksj:notSpecified");
 		this.charactersTarget.add("ksj:administrativeAreaCode");
+		this.charactersTarget.add("ksj:administrativeArea");
 
 		this.charactersTarget.add("ksj:bsc");
 		this.charactersTarget.add("ksj:bln");

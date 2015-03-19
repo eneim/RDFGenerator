@@ -1,0 +1,7 @@
+PREFIX	geo:   <http://lab.ene.im/SIBM/property/geo#> 
+PREFIX 	sibm:  <http://lab.ene.im/SIBM/property#> 
+PREFIX 	xsd:   <http://www.w3.org/2001/XMLSchema#> 
+PREFIX 	rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX	rel:   <http://purl.org/vocab/relationship/>
+PREFIX	vcard:	<http://www.w3.org/2006/vcard/ns#>
+PREFIX	foaf:	<http://xmlns.com/foaf/0.1/>

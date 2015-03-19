@@ -5,8 +5,11 @@ import im.ene.lab.sibm.util.NDataUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import ucar.nc2.grib.grib2.Grib2Gds.LatLon;
+
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Resource;
+import com.vividsolutions.jts.geom.Point;
 
 public class NPrefecture {
 
@@ -20,14 +23,22 @@ public class NPrefecture {
 
 	private ArrayList<ShelterPoint> shelterPoints;
 
-	private List<ShelterPoint> invalidPoinst = new ArrayList<ShelterPoint>();
-
 	private int pointCount = 0;
 
 	private int averageCapacity = 0;
 
+	private NPoint center;
+
+	public NPoint getCenter() {
+		return center;
+	}
+
+	public void setCenter(NPoint center) {
+		this.center = center;
+	}
+
 	public ArrayList<ShelterPoint> getShelterPoints() {
-		return shelterPoints;
+		return this.shelterPoints;
 	}
 
 	public void setShelterPoint(ShelterPoint point) {
@@ -36,6 +47,28 @@ public class NPrefecture {
 		this.resource.addProperty(NProperty.hasShelterPoint,
 				point.getResource());
 		this.resource.getModel().add(point.getResource().getModel());
+	}
+
+	public void setShelterPoints(ArrayList<ShelterPoint> shelterPoints) {
+		if (shelterPoints == null || shelterPoints.size() < 1)
+			return;
+
+		this.shelterPoints = shelterPoints;
+		for (int i = 0; i < shelterPoints.size(); i++) {
+			int cap = shelterPoints.get(i).getSeatingCapacity();
+			if (cap < 0)
+				cap = 0;
+			averageCapacity += cap;
+		}
+
+		pointCount = shelterPoints.size();
+		averageCapacity = averageCapacity / pointCount;
+
+		for (ShelterPoint point : shelterPoints) {
+			this.resource.addProperty(NProperty.hasShelterPoint,
+					point.getResource());
+			this.resource.getModel().add(point.getResource().getModel());
+		}
 	}
 
 	public void setShelterPoints(ShelterPoint[] shelterPoints) {
@@ -60,9 +93,6 @@ public class NPrefecture {
 			this.resource.addProperty(NProperty.hasShelterPoint,
 					point.getResource());
 			this.resource.getModel().add(point.getResource().getModel());
-
-			if (point.getSeatingCapacity() < 0)
-				this.invalidPoinst.add(point);
 		}
 	}
 
@@ -72,10 +102,6 @@ public class NPrefecture {
 
 	public int getAverageCapacity() {
 		return averageCapacity;
-	}
-
-	public int getInvalidPointCount() {
-		return this.invalidPoinst.size();
 	}
 
 	private Model model = NDataUtils.createModel();

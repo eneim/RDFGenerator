@@ -7,7 +7,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 
 public class NStatus {
 
-	private static final String BASE_PERSON = "http://lab.ene.im/SIBM/thing/status/";
+	private static final String BASE_STATUS = "http://lab.ene.im/SIBM/thing/status/";
 
 	private String name;
 
@@ -21,7 +21,7 @@ public class NStatus {
 		this.name = name;
 		this.level = level;
 
-		resource = model.createResource(BASE_PERSON + name);
+		resource = model.createResource(BASE_STATUS + name);
 		resource.addLiteral(NProperty.statusName, name).addLiteral(
 				NProperty.statusLevel, model.createTypedLiteral(level));
 
