@@ -26,6 +26,9 @@ gen/
 # Local configuration file (sdk path, etc)
 #local.properties
 
+# iml file
+*.iml
+
 # eclipse settings
 #.classpath
 #.project
@@ -36,3 +39,13 @@ gen/
 /shelter_data/
 #/sibm/
 /sibm/result
+
+#gradle wraper files
+settings.gradle
+.gradle/
+.idea/
+out/
+.gradle
+.idea
+out
+build

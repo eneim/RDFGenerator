@@ -876,12 +876,15 @@ public class SIBM {
 
 			ResultSet rs;
 
-			try (QueryExecution qExec = QueryExecutionFactory.create(select,
-					dataset)) {
+			try {
+				QueryExecution qExec = QueryExecutionFactory.create(select,
+						dataset);
 				rs = qExec.execSelect();
 				ResultSetFormatter
 						.outputAsCSV(new FileOutputStream(rsFile), rs);
 				// ResultSetFormatter.out(rs);
+			} catch (Exception er) {
+				er.printStackTrace();
 			}
 
 			dataset.end();
