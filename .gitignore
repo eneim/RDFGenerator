@@ -37,16 +37,8 @@ gen/
 # this project only
 #/data/
 /shelter_data/
-<<<<<<< HEAD
-<<<<<<< HEAD
-#/sibm/
-#/sibm/result/
-=======
-/sibm/
-=======
 #/sibm/
 /sibm/result
->>>>>>> 9705b15a3cdc030512cdb8e5567bb6be13d0e57d
 
 #gradle wraper files
 settings.gradle
@@ -55,7 +47,3 @@ out/
 .idea
 out
 build
-<<<<<<< HEAD
->>>>>>> master
-=======
->>>>>>> 9705b15a3cdc030512cdb8e5567bb6be13d0e57d
