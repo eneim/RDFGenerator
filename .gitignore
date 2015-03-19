@@ -42,10 +42,8 @@ gen/
 
 #gradle wraper files
 settings.gradle
-.gradle/
 .idea/
 out/
-.gradle
 .idea
 out
 build
