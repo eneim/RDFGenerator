@@ -1,0 +1,19 @@
+PREFIX	geo:   <http://lab.ene.im/SIBM/property/geo#>
+PREFIX 	sibm:  <http://lab.ene.im/SIBM/property#>
+PREFIX 	xsd:   <http://www.w3.org/2001/XMLSchema#>
+PREFIX 	rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT 	?statusName (count(?p1) AS ?male) (count(?p2) AS ?female) 
+WHERE {
+	{	
+		?p1 sibm:profile ?y1 .
+		?y1 sibm:gender "Male"^^xsd:string .
+		?p1 sibm:status ?status .
+		?status sibm:statusName ?statusName;
+    } UNION {
+    	?p2 sibm:profile ?y2 .
+		?y2 sibm:gender "Female"^^xsd:string .
+		?p2 sibm:status ?status .
+		?status sibm:statusName ?statusName;
+    }
+} group by ?statusName order by ?statusName

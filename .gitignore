@@ -24,19 +24,23 @@ bin/
 gen/
 
 # Local configuration file (sdk path, etc)
-local.properties
+#local.properties
 
 # iml file
 *.iml
 
 # eclipse settings
-.classpath
-.project
-.settings/
+#.classpath
+#.project
+#.settings/
 
 # this project only
-/data/
+#/data/
 /shelter_data/
+<<<<<<< HEAD
+#/sibm/
+#/sibm/result/
+=======
 /sibm/
 
 #gradle wraper files
@@ -51,3 +55,4 @@ out/
 .idea
 out
 build
+>>>>>>> master
